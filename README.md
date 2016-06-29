@@ -11,7 +11,9 @@ The master branch reflects the current 1.1 release. The develop branch reflects 
 # LINKS
 
 http://pghydro.org/
+
 http://pghydro.org/documentation/
+
 http://pghydro.org/downloads/
 
 # INTRODUCTION
@@ -25,7 +27,10 @@ PgHydro is Open Source, available under the GPLv2 license and is supported by a 
 # REQUIREMENTS
 
 Postgresql version >= 9.1
+
 PostGIS version >= 2.0
+
+QGIS version >= 2.0
 
 ## Notes
 
