@@ -1,6 +1,6 @@
-# QGIS PgHydroTools Plugin - PgHydro Interface
+# QGIS PgHydroTools Plugin - PgHydro Extension Interface to PostgreSQL/PostGIS
 
-QGIS PgHydroTools Plugin is an interface used in QGIS to activate all functionality of PgHydro in PostGIS/PostgreSQL.
+QGIS PgHydroTools Plugin is an interface used in QGIS to activate all functionality of PgHydro Extension to PostgreSQL/PostGIS.
 
 # STATUS
 
