@@ -30,7 +30,17 @@ Postgresql version >= 9.1
 
 PostGIS version >= 2.0
 
-QGIS version >= 2.0
+QGIS version >= 2.0 64 bits
+
+## INSTALLATION
+
+Copy the content of this repository to
+
+\QGIS Brighton\apps\qgis\python\plugins\PghydroTools 
+or
+\QGIS Wien\apps\qgis-ltr\python\plugins\PghydroTools
+or
+\QGIS 2.14\apps\qgis-ltr\python\plugins\PghydroTools
 
 ## Notes
 
