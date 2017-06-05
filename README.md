@@ -18,11 +18,11 @@ PgHydro is Open Source, available under the GPLv2 license and is supported by a 
 
 # REQUIREMENTS
 
-Postgresql version = postgresql-9.3.5-3-windows-x64
+Postgresql version = postgresql-9.3.5-3-windows-x64(https://drive.google.com/file/d/0B2u6WhefYxhZMmlPazUwR2pZYWs/view?usp=sharing)
 
-PostGIS version = postgis-bundle-pg93x64-setup-2.1.4-1
+PostGIS version = postgis-bundle-pg93x64-setup-2.1.4-1(https://drive.google.com/file/d/0B2u6WhefYxhZdTIyVlRBWllPeXc/view?usp=sharing)
 
-QGIS version = QGIS-OSGeo4W-2.6.1-1-Setup-x86_64
+QGIS version = QGIS-OSGeo4W-2.6.1-1-Setup-x86_64(https://drive.google.com/file/d/0B2u6WhefYxhZWVI4XzYzdkplXzg/view?usp=sharing)
 
 ## INSTALLATION
 
