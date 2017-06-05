@@ -8,14 +8,6 @@ QGIS PgHydroTools Plugin is an interface used in QGIS to activate all functional
 
 The master branch reflects the current 1.1 release. The develop branch reflects the 1.2-dev
 
-# LINKS
-
-http://pghydro.org/
-
-http://pghydro.org/documentation/
-
-http://pghydro.org/downloads/
-
 # INTRODUCTION
 
 PgHydro comprises hydrographic objects developed in PostGIS/PostgreSQL spatial database management system to support decision making in Water Resources.
@@ -26,21 +18,17 @@ PgHydro is Open Source, available under the GPLv2 license and is supported by a 
 
 # REQUIREMENTS
 
-Postgresql version >= 9.1
+Postgresql version = postgresql-9.3.5-3-windows-x64
 
-PostGIS version >= 2.0
+PostGIS version = postgis-bundle-pg93x64-setup-2.1.4-1
 
-QGIS version >= 2.0 64 bits
+QGIS version = QGIS-OSGeo4W-2.6.1-1-Setup-x86_64
 
 ## INSTALLATION
 
 Copy the content of this repository to
 
-\QGIS Brighton\apps\qgis\python\plugins\PghydroTools 
-or
-\QGIS Wien\apps\qgis-ltr\python\plugins\PghydroTools
-or
-\QGIS 2.14\apps\qgis-ltr\python\plugins\PghydroTools
+\QGIS Brighton\apps\qgis\python\plugins\PghydroTools
 
 ## Notes
 
