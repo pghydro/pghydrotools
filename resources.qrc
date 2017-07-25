@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/plugins/PghydroTools" >
-        <file>icon.png</file>
-    </qresource>
-</RCC>
