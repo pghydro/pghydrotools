@@ -8,13 +8,14 @@
 
 [general]
 name=Pghydro Tools
-qgisMinimumVersion=2.1
-description=This plugin create the pghydro schema and runs all the process to consist a drainage network
-version=2.1
-author=Alexandre de Amorim Teixeira
+qgisMinimumVersion=2.0
+description=PgHydro Tools Interface for PgHydro Extension for PostgreSQL/PostGIS
+version=2.0.1
+author=PgHydro Team
 email=pghydro.project@gmail.com
 
-about=This plugin create the pghydro schema and runs all the process to consist a drainage network.
+about=QGIS PgHydroTools Plugin is an interface used in QGIS to activate all functionality of PgHydro Extension for PostgreSQL/PostGIS
+To use this plugin, you have to install the PgHydro extension for PostgreSQL/PostGIS at https://github.com/pghydro/pghydro
 
 tracker=www.github.com/pghydro/pghydrotools
 repository=www.github.com/pghydro/pghydrotools
@@ -24,6 +25,7 @@ repository=www.github.com/pghydro/pghydrotools
 
 # Uncomment the following line and add your changelog:
 # changelog=
+	2.0.1 - "No module named resources_rc" fixed.
 
 # Tags are comma separated with spaces allowed
 tags=spatial database system, otto pfafstetter, drainage
