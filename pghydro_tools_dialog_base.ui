@@ -2561,7 +2561,7 @@
       <rect>
        <x>200</x>
        <y>240</y>
-       <width>221</width>
+       <width>231</width>
        <height>31</height>
       </rect>
      </property>
@@ -2573,7 +2573,7 @@
       </font>
      </property>
      <property name="text">
-      <string>PgHydro Tools Versão 2.1</string>
+      <string>PgHydro Tools Versão 2.0.1</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
