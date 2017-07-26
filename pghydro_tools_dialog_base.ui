@@ -2573,7 +2573,7 @@
       </font>
      </property>
      <property name="text">
-      <string>PgHydro Tools Versão 2.0</string>
+      <string>PgHydro Tools Versão 2.1</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
@@ -2621,8 +2621,5 @@
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections/>
 </ui>
