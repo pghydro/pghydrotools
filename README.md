@@ -6,7 +6,7 @@ QGIS PgHydroTools Plugin is an interface used in QGIS to activate all functional
 
 ## Branches
 
-The master branch reflects the current 2.0 release. The develop branch reflects the 2.1-dev
+The master branch reflects the current 2.1 release. The develop branch reflects the 2.2-dev
 
 # INTRODUCTION
 
