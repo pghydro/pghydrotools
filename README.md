@@ -36,8 +36,6 @@ To use this plugin, you have to install the PgHydro Extension for PostgreSQL/Pos
 
 The plugin was developed in python and the latest stable release is available for download by QGIS or by the link https://plugins.qgis.org/plugins/PghydroTools/
 
-Anothe option is coping the content of this repository to QGIS 2.x\apps\qgis\qgis-ltr\python\plugins\PghydroTools
-
 ## Notes
 
 IMPORTANT : the changes are made in the current project, and will be saved only if you save the project.
