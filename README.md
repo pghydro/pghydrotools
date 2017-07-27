@@ -8,7 +8,7 @@ To use this plugin, you have to install the PgHydro extension for PostgreSQL/Pos
 
 ## Branches
 
-The master branch reflects the current 2.0.1 release. The develop branch reflects the 2.0.2-dev
+The master branch reflects the future next release.
 
 # INTRODUCTION
 
@@ -34,7 +34,7 @@ To use this plugin, you have to install the PgHydro Extension for PostgreSQL/Pos
 
 ## INSTALLATION
 
-The plugin was developed in python and is available for download by QGIS or by the link https://plugins.qgis.org/plugins/PghydroTools/
+The plugin was developed in python and the latest stable release is available for download by QGIS or by the link https://plugins.qgis.org/plugins/PghydroTools/
 
 Anothe option is coping the content of this repository to QGIS 2.x\apps\qgis\qgis-ltr\python\plugins\PghydroTools
 
