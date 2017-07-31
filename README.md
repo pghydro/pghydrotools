@@ -31,7 +31,7 @@ PostGIS version = postgis-bundle-pg93x64-setup-2.1.4-1
 QGIS version = QGIS-OSGeo4W-2.6.1-1-Setup-x86_64
 (https://drive.google.com/file/d/0B2u6WhefYxhZWVI4XzYzdkplXzg/view?usp=sharing)
 
-To use this plugin, you have to install the PgHydro Extension for PostgreSQL/PostGIS
+To use this plugin, you have to install the PgHydro Extension (v.6.0) for PostgreSQL/PostGIS
 (https://github.com/pghydro/pghydro)
 
 ## INSTALLATION
