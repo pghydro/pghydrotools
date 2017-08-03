@@ -36,7 +36,7 @@ homepage=www.pghydro.org
 category=Database
 icon=icon.png
 # experimental flag
-experimental=False
+experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
