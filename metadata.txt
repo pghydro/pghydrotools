@@ -26,8 +26,9 @@ repository=www.github.com/pghydro/pghydrotools
 # Uncomment the following line and add your changelog:
 # changelog=
 	2.0.1 - "No module named resources_rc" fixed.
-	2.0.2 - ...
-
+	2.0.2 - Execute and Return Queries update.
+			...
+	
 # Tags are comma separated with spaces allowed
 tags=spatial database system, otto pfafstetter, drainage, hydrology, hydrography, hydro
 

@@ -227,94 +227,117 @@ class PghydroTools:
         del self.toolbar
 
 ###Database Editing		
-		
-    def create_database(self):
+
+    def execute_sql(self, sql):
 		host = self.dlg.lineEdit_host.text()
 		port = self.dlg.lineEdit_port.text()
 		dbname = self.dlg.lineEdit_base.text()
 		schema = self.dlg.lineEdit_schema.text()
 		user = self.dlg.lineEdit_user.text()
 		password = self.dlg.lineEdit_password.text()
-		postgres = 'postgres'
 		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
+		try:
+			conn = None
+			conn = psycopg2.connect(connection_str)
+			conn.autocommit = True
+			cur = conn.cursor()
+			cur.execute(sql)
+			cur.close()
+			conn.close()
+
+		except:
+			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
+			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
+			self.dlg.console.repaint()
+
+    def return_sql(self, sql):
+		host = self.dlg.lineEdit_host.text()
+		port = self.dlg.lineEdit_port.text()
+		dbname = self.dlg.lineEdit_base.text()
+		schema = self.dlg.lineEdit_schema.text()
+		user = self.dlg.lineEdit_user.text()
+		password = self.dlg.lineEdit_password.text()
+		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
+		try:
+			conn = None
+			conn = psycopg2.connect(connection_str)
+			conn.autocommit = True
+			cur = conn.cursor()
+			cur.execute(sql)
+			result = str(cur.fetchone()[0])
+			cur.close()
+			conn.close()
+			return result
+
+		except:
+			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
+			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
+			self.dlg.console.repaint()
+
+			
+    def create_database(self):
+		host = self.dlg.lineEdit_host.text()
+		port = self.dlg.lineEdit_port.text()
+		dbname = self.dlg.lineEdit_base.text()
+		user = self.dlg.lineEdit_user.text()
+		password = self.dlg.lineEdit_password.text()
+		postgres = 'postgres'
 		connection_str_postgres = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, postgres, user, password)
+
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append("Criando Banco de Dados e Extensoes do PgHydro. Aguarde...")
 		self.dlg.console.repaint()
 
 		try:
 			conn = psycopg2.connect(connection_str_postgres)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+			conn.autocommit = True
 			cur = conn.cursor()
+
 			createdatabase = """
 			CREATE DATABASE """+dbname+""";
 			"""
+
 			cur.execute(createdatabase)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Banco de Dados Criado Com Sucesso!\n")
 			self.dlg.console.repaint()
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			drop_previous_extensions = """
 			
-			DROP EXTENSION IF EXISTS pgh_output;
-			
-			DROP EXTENSION IF EXISTS pgh_consistency;
-			
-			DROP EXTENSION IF EXISTS pghydro;
-			
-			DROP EXTENSION IF EXISTS postgis;
-			
-			CREATE EXTENSION postgis;
-			
-			"""
+			cur.close()
+			conn.close()
 			
 			create_spatial_database = """
-			
 			CREATE EXTENSION postgis;
-			
 			"""
 			create_pghydro = """
-			
 			CREATE EXTENSION pghydro;
-			
 			"""
 			create_pgh_consistency = """
-			
 			CREATE EXTENSION pgh_consistency;
-			
 			"""
 			create_pgh_output = """
-			
 			CREATE EXTENSION pgh_output;
-			
 			"""
-#			cur.execute(drop_previous_extensions)
-			cur.execute(create_spatial_database)
+			
+			self.execute_sql(create_spatial_database)
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Banco de Dados Espaciais Criado Com Sucesso!\n")
 			self.dlg.console.repaint()
-			cur.execute(create_pghydro)
+			self.execute_sql(create_pghydro)
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Extensao PgHydro Criada Com Sucesso!\n")
 			self.dlg.console.repaint()
-			cur.execute(create_pgh_consistency)
+			self.execute_sql(create_pgh_consistency)
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Extensao PgHydro Consistency Criada Com Sucesso!\n")
 			self.dlg.console.repaint()
-			cur.execute(create_pgh_output)
+			self.execute_sql(create_pgh_output)
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Extensao PgHydro Output Criada Com Sucesso!\n")
 			self.dlg.console.repaint()
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+			
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Banco de Dados Espaciais e Extensoes do PgHydro Criadas Com Sucesso!\n")
 			self.dlg.console.repaint()
@@ -356,14 +379,6 @@ class PghydroTools:
 
 		try:
 		
-			host = self.dlg.lineEdit_host.text()
-			port = self.dlg.lineEdit_port.text()
-			dbname = self.dlg.lineEdit_base.text()
-			schema = self.dlg.lineEdit_schema.text()
-			user = self.dlg.lineEdit_user.text()
-			password = self.dlg.lineEdit_password.text()
-			connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 			layers = self.iface.legendInterface().layers()
 			selectedLayerIndex = self.dlg.input_drainage_line_table_MapLayerComboBox.currentIndex()
 			selectedLayer = layers[selectedLayerIndex]
@@ -382,19 +397,11 @@ class PghydroTools:
 			self.dlg.console.append('COLUNA GEOMETRICA: '+input_drainage_line_table_attribute_geom)
 			self.dlg.console.repaint()
 		
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pghydro.pghfn_input_data_drainage_line('"""+input_drainage_line_table_schema+"""','"""+input_drainage_line_table+"""','"""+input_drainage_line_table_attribute_geom+"""','"""+input_drainage_line_table_attribute_name+"""');
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Importacao dos Trechos de Drenagem Realizada Com Sucesso!\n')
@@ -412,14 +419,6 @@ class PghydroTools:
 
 		try:
 	
-			host = self.dlg.lineEdit_host.text()
-			port = self.dlg.lineEdit_port.text()
-			dbname = self.dlg.lineEdit_base.text()
-			schema = self.dlg.lineEdit_schema.text()
-			user = self.dlg.lineEdit_user.text()
-			password = self.dlg.lineEdit_password.text()
-			connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Importando Areas de Contribuicao Hidrografica...\n')
 			self.dlg.console.repaint()
@@ -440,19 +439,10 @@ class PghydroTools:
 			self.dlg.console.append('COLUNA GEOMETRICA: '+input_drainage_area_table_attribute_geom)
 			self.dlg.console.repaint()
 		
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pghydro.pghfn_input_data_drainage_area('"""+input_drainage_area_table_schema+"""','"""+input_drainage_area_table+"""','"""+input_drainage_area_table_attribute_geom+"""');
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+			self.execute_sql(sql)
 		
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Importacao das Bacias Realizada Com Sucesso!\n')
@@ -466,34 +456,18 @@ class PghydroTools:
 #####Consistency Drainage Line			
 			
     def Check_DrainageLineIsNotSingle(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Geometrias Nao Unicas...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelineisnotsingle;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Nao Unicas: ")
@@ -513,32 +487,17 @@ class PghydroTools:
 			
 			
     def ExplodeDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Explodindo Feições Nao Unicas...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_explodedrainageline();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.lineEdit_Check_DrainageLineIsNotSingle.setText('')
 			self.dlg.lineEdit_Check_DrainageLineIsNotSingle.repaint()
@@ -554,34 +513,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_DrainageLineIsNotSimple(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Geometrias Nao Simples...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelineisnotsimple;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Nao Simples: ")
@@ -601,32 +544,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def MakeDrainageLineSimple(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Simplificando Feicoes Nao Simples...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_makedrainagelinesimple();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.lineEdit_Check_DrainageLineIsNotSimple.setText('')
 			self.dlg.lineEdit_Check_DrainageLineIsNotSimple.repaint()
@@ -642,34 +570,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_DrainageLineIsNotValid(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Geometrias Nao Validas...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelineisnotvalid;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Nao Validas: ")
@@ -689,32 +601,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def MakeDrainageLineValid(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Validando Feicoes Nao Validas...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_makedrainagelinevalid();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.lineEdit_Check_DrainageLineIsNotValid.setText('')	
 			self.dlg.lineEdit_Check_DrainageLineIsNotValid.repaint()
@@ -730,13 +627,7 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Check_DrainageLineGeometryConsistencies(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		DrainageLinePrecision = self.dlg.lineEdit_DrainageLinePrecision.text()
 		DrainageLineOffset = self.dlg.lineEdit_DrainageLineOffset.text()
 
@@ -745,21 +636,21 @@ class PghydroTools:
 			self.dlg.console.append('Verificando Consistencia Topologica...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
+			"""
 
+			sql2 = """
 			SELECT pgh_consistency.pghfn_MakeSnapToGridDrainageLine("""+DrainageLinePrecision+""");
 
 			SELECT pgh_consistency.pghfn_removereapetedpointsdrainageline();
 
 			SELECT pgh_consistency.pghfn_DeleteDrainageLineGeometryEmpty();
+			"""
 
+			sql3 = """
 			SELECT setval(('pghydro.drn_pk_seq'::text)::regclass, """+DrainageLineOffset+""", false);
 
 			UPDATE pghydro.pghft_drainage_line
@@ -768,15 +659,16 @@ class PghydroTools:
 			CREATE INDEX drn_gm_idx ON pghydro.pghft_drainage_line USING GIST(drn_gm);
 
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
-			
-			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyGeometryTables();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			sql4 = """
+			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyGeometryTables();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			self.execute_sql(sql4)
 
 			self.Check_DrainageLineIsNotSimple()
 			self.Check_DrainageLineIsNotValid()
@@ -792,34 +684,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_DrainageLineWithinDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Geometria Dentro de Geometria...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelinewithindrainageline;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Dentro de Geometrias: ")
@@ -840,32 +716,16 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def DeleteDrainageLineWithinDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Excluindo Geometrias Dentro de Geometrias...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_deletedrainagelinewithindrainageline();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+			self.execute_sql(sql)
 
 			self.dlg.lineEdit_Check_DrainageLineWithinDrainageLine.setText('')	
 			self.dlg.lineEdit_Check_DrainageLineWithinDrainageLine.repaint()
@@ -881,34 +741,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Check_DrainageLineOverlapDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Geometria Sobreposta a Geometria...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelineoverlapdrainageline;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Sobrepostas a Geometrias: ")
@@ -924,34 +768,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_DrainageLineLoops(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Loops...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelineloops;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Com Loops: ")
@@ -967,32 +795,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Check_DrainageLineTopologyConsistencies_1(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Consistencia Topologica Parte 1...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyTopologyTables_1();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+			
+			self.execute_sql(sql)
 
 			self.Check_DrainageLineWithinDrainageLine()
 			self.Check_DrainageLineOverlapDrainageLine()
@@ -1008,34 +821,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_DrainageLineCrossDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Geometrias Que Cruzam Geometrias...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelinecrossdrainageline;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Com Cruzamento: ")
@@ -1056,34 +853,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Check_DrainageTouchDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Geometrias Que Tocam Geometrias...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelinetouchdrainageline;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Que se Tocam: ")
@@ -1101,32 +882,17 @@ class PghydroTools:
 			self.dlg.console.repaint()			
 			
     def Check_DrainageLineTopologyConsistencies_2(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Consistencia Topologica Parte 2...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyTopologyTables_2();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+			
+			self.execute_sql(sql)
 
 			self.Check_DrainageLineCrossDrainageLine()
 			self.Check_DrainageTouchDrainageLine()
@@ -1141,13 +907,7 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def BreakDrainageLines(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		DrainageLinePrecision = self.dlg.lineEdit_DrainageLinePrecision.text()
 
 		try:
@@ -1155,24 +915,22 @@ class PghydroTools:
 			self.dlg.console.append("Quebrando Geometrias...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			SELECT pgh_consistency.pghfn_CreateDrainageLineVertexIntersections("""+DrainageLinePrecision+""");
-			
-			SELECT pgh_consistency.pghfn_BreakDrainageLine();
-			
-			SELECT pgh_consistency.pghfn_ExplodeDrainageLine();
-
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
 
+			sql2 = """
+			SELECT pgh_consistency.pghfn_BreakDrainageLine();
+			"""
+
+			sql3 = """
+			SELECT pgh_consistency.pghfn_ExplodeDrainageLine();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Geometrias Quebradas Com Sucesso!\n')
 			self.dlg.console.repaint()
@@ -1189,34 +947,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 		
     def Check_PointValenceValue2(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Pseudos Nos (Valencia = 2)...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_pointvalencevalue2;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Pseudos Nos (Valencia = 2): ")
@@ -1237,32 +979,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def UnionDrainageLineValence2(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Unindo Drenagens...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_uniondrainagelinevalence2();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 			
 			self.dlg.lineEdit_Check_PointValenceValue2.setText('')
 			self.dlg.lineEdit_Check_PointValenceValue2.repaint()
@@ -1278,34 +1005,18 @@ class PghydroTools:
 			self.dlg.console.repaint()			
 			
     def Check_PointValenceValue4(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Confluencias Multiplas (Valencia = 4)...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_pointvalencevalue4;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Confluencias Multiplas (Valencia = 4): ")
@@ -1321,13 +1032,7 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Execute_Network_Topology(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		DrainagePointOffset = self.dlg.lineEdit_DrainagePointOffset.text()
 
 		try:
@@ -1335,21 +1040,23 @@ class PghydroTools:
 			self.dlg.console.append('Executando Topologia de Rede...\n')
 			self.dlg.console.repaint()
 		
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drp_gm_idx;
 
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
+			"""
 
+			sql2 = """
 			SELECT pghydro.pghfn_assign_vertex_id("""+DrainagePointOffset+""");
+			"""
 
+			sql3 = """
 			SELECT pghydro.pghfn_CalculateValence();
+			"""
 
+			sql4 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 		
 			CREATE INDEX drn_gm_idx ON pghydro.pghft_drainage_line USING GIST(drn_gm);
@@ -1359,16 +1066,18 @@ class PghydroTools:
 			CREATE INDEX drp_gm_idx ON pghydro.pghft_drainage_point USING GIST(drp_gm);
 
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
-
-			SELECT pgh_consistency.pghfn_updatedrainagelinenetworkconsistencytables();
-		
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
 
+			sql5 = """
+			SELECT pgh_consistency.pghfn_updatedrainagelinenetworkconsistencytables();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			self.execute_sql(sql4)
+			self.execute_sql(sql5)
+			
 			self.Check_PointValenceValue2()
 			self.Check_PointValenceValue4()
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
@@ -1381,13 +1090,7 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def UpdateShorelineEndingPoint(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		UpdateShorelineEndingPoint = self.dlg.lineEdit_UpdateShorelineEndingPoint.text()
 		
 		try:
@@ -1395,19 +1098,11 @@ class PghydroTools:
 			self.dlg.console.append('Identificando "No Fim da Drenagem"...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pghydro.pghfn_UpdateShorelineEndingPoint("""+UpdateShorelineEndingPoint+""");
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('"No Fim da Drenagem" Identificada com Sucesso!\n')
@@ -1419,13 +1114,7 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def UpdateShorelineStartingPoint(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		UpdateShorelineStartingPoint = self.dlg.lineEdit_UpdateShorelineStartingPoint.text()
 
 		try:
@@ -1433,19 +1122,11 @@ class PghydroTools:
 			self.dlg.console.append('Identificando "No Inicio da Drenagem"...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pghydro.pghfn_UpdateShorelineStartingPoint("""+UpdateShorelineStartingPoint+""");
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('"No Inicio da Drenagem" Identificada com Sucesso!\n')
@@ -1457,33 +1138,18 @@ class PghydroTools:
 			self.dlg.console.repaint()			
 			
     def Check_DrainageLineIsDisconnected(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Trechos Desconexos...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelineisdisconnected;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Trechos Desconexos: ")
@@ -1499,33 +1165,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Check_PointDivergent(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Pontos Divergentes...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_pointdivergent;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Pontos Divergentes: ")
@@ -1541,34 +1192,29 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Execute_Flow_Direction(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Executando Direcao de Fluxo...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drp_gm_idx;
 
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
-			
-			SELECT pghydro.pghfn_CalculateFlowDirection();
+			"""
 
+			sql2 = """
+			SELECT pghydro.pghfn_CalculateFlowDirection();
+			"""
+
+			sql3 = """
 			SELECT pghydro.pghfn_ReverseDrainageLine();
-			
+			"""
+
+			sql4 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 			
 			CREATE INDEX drn_gm_idx ON pghydro.pghft_drainage_line USING GIST(drn_gm);
@@ -1578,15 +1224,17 @@ class PghydroTools:
 			CREATE INDEX drp_gm_idx ON pghydro.pghft_drainage_point USING GIST(drp_gm);
 
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
-			
-			SELECT pgh_consistency.pghfn_updatedrainagelineconnectionconsistencytables();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			sql5 = """
+			SELECT pgh_consistency.pghfn_updatedrainagelineconnectionconsistencytables();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			self.execute_sql(sql4)
+			self.execute_sql(sql5)
 
 			self.Check_DrainageLineIsDisconnected()
 			self.Check_PointDivergent()
@@ -1603,34 +1251,18 @@ class PghydroTools:
 ###Drainage Area Consistency
 			
     def Check_DrainageAreaIsNotSingle(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Geometrias Nao Unicas...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainageareaisnotsingle;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Nao Unicas: ")
@@ -1652,32 +1284,17 @@ class PghydroTools:
 			
 			
     def ExplodeDrainageArea(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Explodindo Geometrias Nao Unicas...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_explodedrainagearea();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Bacias Explodidas com sucesso!\n')
@@ -1693,34 +1310,18 @@ class PghydroTools:
 			self.dlg.console.repaint()			
 			
     def Check_DrainageAreaIsNotSimple(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Geometrias Nao Simples...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainageareaisnotsimple;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Nao Simples: ")
@@ -1741,32 +1342,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def MakeDrainageAreaSimple(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Simplificando Geometrias Nao Simples...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_makedrainageareasimple();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Bacias Simplificadas com sucesso!\n')
@@ -1782,34 +1368,18 @@ class PghydroTools:
 			self.dlg.console.repaint()					
 			
     def Check_DrainageAreaIsNotValid(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Geometrias Nao Validas...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainageareaisnotvalid;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Nao Validas: ")
@@ -1830,32 +1400,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def MakeDrainageAreaValid(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Validando Geometrias Nao Validas...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_makedrainageareavalid();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Bacias Validadas Com Sucesso!\n')
@@ -1871,13 +1426,7 @@ class PghydroTools:
 			self.dlg.console.repaint()		
 
     def Check_DrainageAreaGeometryConsistencies(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Verificando Consistencia Topologica\n')
 		self.dlg.console.repaint()
@@ -1889,23 +1438,29 @@ class PghydroTools:
 			self.dlg.console.append('Verificando Consistencias Topologicas...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.dra_gm_idx;
 		
 			ALTER TABLE pghydro.pghft_drainage_area DROP CONSTRAINT IF EXISTS dra_pk_pkey;
-			
+			"""
+
+			sql2 = """
 			SELECT pgh_consistency.pghfn_makesnaptogriddrainagearea("""+DrainageAreaPrecision+""");
+			"""
 
+			sql3 = """
 			SELECT pgh_consistency.pghfn_removereapetedpointsdrainagearea();
+			"""
 
+			sql4 = """
 			SELECT pgh_consistency.pghfn_DeleteDrainageAreaGeometryEmpty();
-		
-			SELECT pgh_consistency.pghfn_RemoveDrainageAreaInteriorRings();
+			"""
 
+			sql5 = """
+			SELECT pgh_consistency.pghfn_RemoveDrainageAreaInteriorRings();
+			"""
+
+			sql6 = """
 			SELECT setval(('pghydro.dra_pk_seq'::text)::regclass, """+DrainageAreaOffset+""", false);
 			
 			UPDATE pghydro.pghft_drainage_area
@@ -1914,19 +1469,24 @@ class PghydroTools:
 			CREATE INDEX dra_gm_idx ON pghydro.pghft_drainage_area USING GIST(dra_gm);
 			
 			ALTER TABLE pghydro.pghft_drainage_area ADD CONSTRAINT dra_pk_pkey PRIMARY KEY (dra_pk);
-		
-			SELECT pgh_consistency.pghfn_updatedrainageareaconsistencygeometrytables();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			sql7 = """
+			SELECT pgh_consistency.pghfn_updatedrainageareaconsistencygeometrytables();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			self.execute_sql(sql4)
+			self.execute_sql(sql5)
+			self.execute_sql(sql6)
+			self.execute_sql(sql7)
 
 			self.Check_DrainageAreaIsNotSimple()
 			self.Check_DrainageAreaIsNotValid()
 			self.Check_DrainageAreaIsNotSingle()
+
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Consistencia Topologica Verificada Com Sucesso\n')
 			self.dlg.console.repaint()
@@ -1938,33 +1498,18 @@ class PghydroTools:
 			self.dlg.console.repaint()			
 			
     def Check_DrainageAreaHaveSelfIntersection(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Geometrias Com auto-interseccao...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainageareahaveselfintersection;
-			
 			"""
-			cur = conn.cursor()
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Com Auto-interseccao: ")
@@ -1985,32 +1530,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def RemoveDrainageAreaOverlap(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Removendo Geometrias Sobrepostas...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_removedrainageareaoverlap();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Sobreposicoes Geometricas Removidas Com Sucesso!\n')
@@ -2027,33 +1557,18 @@ class PghydroTools:
 
 			
     def Check_DrainageAreaWithinDrainageArea(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Geometrias Duplicadas...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainageareawithindrainagearea;
-			
 			"""
-			cur = conn.cursor()
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Geometrias Duplicadas: ")
@@ -2074,32 +1589,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def DeleteDrainageAreaWithinDrainageArea(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Excluindo Geometrias Dentro de Geometrias...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_deletedrainageareawithindrainagearea();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Geometrias Dentro de Geometrias Excluidas Com Sucesso!\n')
@@ -2115,32 +1615,17 @@ class PghydroTools:
 			self.dlg.console.repaint()		
 			
     def Check_DrainageAreaTopologyConsistencies(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Verificando Topologia das Geometrias...')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_updatedrainageareaconsistencytopologytables();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.Check_DrainageAreaWithinDrainageArea()
 			self.Check_DrainageAreaHaveSelfIntersection()
@@ -2157,33 +1642,18 @@ class PghydroTools:
 ###Drainage Line x Drainage Area Consistency
 
     def Check_DrainageAreaNoDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Bacias Sem Drenagem...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainageareanodrainageline;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Bacias Sem Drenagem: ")
@@ -2203,32 +1673,17 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Union_DrainageAreaNoDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Unindo Bacias Sem Drenagem...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT pgh_consistency.pghfn_uniondrainageareanodrainageline();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Bacias Sem Drenagem Unidas Com sucesso!\n')
@@ -2244,33 +1699,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_DrainageLineNoDrainageArea(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Drenagens Sem Bacia...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelinenodrainagearea;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Drenagens Sem Bacia: ")
@@ -2285,33 +1725,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Check_DrainageAreaMoreOneDrainageLine(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Bacias Com Mais De Uma Drenagem...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainageareamoreonedrainageline;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Bacias Com Mais De Uma Drenagem: ")
@@ -2327,33 +1752,18 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Check_DrainageLineMoreOneDrainageArea(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Drenagens Com Mais De Uma Bacia...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
-			
 			SELECT count(id)
 			FROM pgh_consistency.pghft_drainagelinemoreonedrainagearea;
-			
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Drenagens Com Mais De Uma Bacia: ")
@@ -2369,31 +1779,27 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_DrainageAreaDrainageLineConsistencies(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Consistencia Topologica...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			ALTER TABLE pghydro.pghft_drainage_area DROP CONSTRAINT IF EXISTS dra_pk_pkey;
 
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
+			"""
 
+			sql2 = """
 			SELECT pghydro.pghfn_AssociateDrainageLine_DrainageArea();
-			
-			SELECT pgh_consistency.pghfn_updatedrainagelinedrainageareaconsistencytables();
+			"""
 
+			sql3 = """
+			SELECT pgh_consistency.pghfn_updatedrainagelinedrainageareaconsistencytables();
+			"""
+
+			sql4 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 			
 			CREATE INDEX drn_gm_idx ON pghydro.pghft_drainage_line USING GIST(drn_gm);
@@ -2405,7 +1811,9 @@ class PghydroTools:
 			DROP INDEX IF EXISTS pghydro.dra_gm_idx;
 			
 			CREATE INDEX dra_gm_idx ON pghydro.pghft_drainage_area USING GIST(dra_gm);
-			
+			"""
+
+			sql5 = """
 			ALTER TABLE pghydro.pghft_drainage_area DROP CONSTRAINT IF EXISTS dra_pk_pkey;
 
 			ALTER TABLE pghydro.pghft_drainage_area ADD CONSTRAINT dra_pk_pkey PRIMARY KEY (dra_pk);
@@ -2413,15 +1821,18 @@ class PghydroTools:
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
 
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
-			
-			SELECT pgh_consistency.pghfn_updatedrainagelinedrainageareaconsistencytables();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			sql6 = """
+			SELECT pgh_consistency.pghfn_updatedrainagelinedrainageareaconsistencytables();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			self.execute_sql(sql4)
+			self.execute_sql(sql5)
+			self.execute_sql(sql6)
 			
 			self.Check_DrainageLineNoDrainageArea()
 			self.Check_DrainageAreaMoreOneDrainageLine()
@@ -2440,35 +1851,22 @@ class PghydroTools:
 ###Principal Procedures			
 			
     def Principal_Procedure(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
 		srid_drainage_line_length = self.dlg.lineEdit_srid_drainage_line_length.text()
 		srid_drainage_area_area = self.dlg.lineEdit_srid_drainage_area_area.text()
 		factor_drainage_line_length = self.dlg.lineEdit_factor_drainage_line_length.text()
 		factor_drainage_area_area = self.dlg.lineEdit_factor_drainage_area_area.text()
 		distance_to_sea = self.dlg.lineEdit_distance_to_sea.text()
 		pfafstetter_basin_code = self.dlg.lineEdit_pfafstetter_basin_code.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 		
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Desligando Indices...\n')
 		self.dlg.console.repaint()
 
-		conn = psycopg2.connect(connection_str)
-		conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-		cur = conn.cursor()
 		sql = """
 		SELECT pghydro.pghfn_TurnOffKeysIndex();
 		"""
-		cur.execute(sql)
-		cur.close()
-		conn.commit()
-		conn.autocommit = True
-		conn.close()
+
+		self.execute_sql(sql)
 
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Indices desligados com Sucesso!\n')
@@ -2479,17 +1877,11 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Comprimento do Trecho...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """			
 			SELECT pghydro.pghfn_CalculateDrainageLineLength("""+srid_drainage_line_length+""", """+factor_drainage_line_length+""");			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Comprimento do Trecho Calculado com Sucesso!\n')
@@ -2500,17 +1892,11 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Area da Bacia...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """			
 			SELECT pghydro.pghfn_CalculateDrainageAreaArea("""+srid_drainage_area_area+""", """+factor_drainage_area_area+""");
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Area da Bacia Calculada com Sucesso!\n')
@@ -2521,17 +1907,11 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Distancia a Foz da Bacia...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_CalculateDistanceToSea("""+distance_to_sea+""");
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Distancia a Foz da Bacia Calculada com Sucesso!\n')
@@ -2542,17 +1922,12 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Area a Montante...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_CalculateUpstreamArea();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
+
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Area a Montante Calculada com Sucesso!\n')
 			self.dlg.console.repaint()
@@ -2562,17 +1937,11 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Drenagem a Montante...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_CalculateUpstreamDrainageLine();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Drenagem a Montante Calculada com Sucesso!\n')
@@ -2583,17 +1952,11 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Drenagem a Jusante...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_CalculateDownstreamDrainageLine();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Drenagem a Jusante Calculada com Sucesso!\n')
@@ -2604,17 +1967,11 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Codificacao de Bacias de Pfafstetter...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_Calculate_Pfafstetter_Codification();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Codificacao de Bacias de Pfafstetter Calculada com Sucesso!\n')
@@ -2625,17 +1982,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Codificacao de Bacias de Pfafstetter...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_UpdatePfafstetterBasinCode('"""+pfafstetter_basin_code+"""');
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Atualizacao da Codificacao de Bacias de Pfafstetter Calculada com Sucesso!\n')
@@ -2646,17 +1997,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Codificacao de Curso Dagua de Pfafstetter...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_UpdatePfafstetterWatercourseCode();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Codificacao de Curso Dagua de Pfafstetter Atualizado com Sucesso!\n')
@@ -2667,17 +2012,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Curso Dagua...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_UpdateWatercourse();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Curso Dagua Atualizado com Sucesso!\n')
@@ -2688,17 +2027,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Colunas Com Codificacao de Pfafstetter...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_InsertColumnPfafstetterBasinCodeLevel();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Colunas com Codificacao de Pfafstetter Atualizadas com Sucesso!\n')
@@ -2709,17 +2042,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Ponto de Inicio do Curso Dagua...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_UpdateWatercourse_Starting_Point();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Ponto de Inicio do Curso Dagua Atualizado com Sucesso!\n')
@@ -2729,17 +2056,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Ponto de Fim de Curso Dagua...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_UpdateWatercourse_Ending_Point();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Ponto de Fim de Curso Dagua Atualizado com Sucesso!\n')
@@ -2749,17 +2070,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Foz Maritima...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_UpdateStream_Mouth();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Foz Maritima Atualizada com Sucesso!\n')
@@ -2770,17 +2085,11 @@ class PghydroTools:
 			self.dlg.console.append('Calculando Ordem de Strahler...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_calculatestrahlernumber();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Ordem de Strahler Calculada com Sucesso!\n')
@@ -2791,17 +2100,12 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Linha de Costa...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_updateshoreline();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
+
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Linha de Costa Atualizada com Sucesso!\n')
 			self.dlg.console.repaint()
@@ -2811,17 +2115,11 @@ class PghydroTools:
 			self.dlg.console.append('Atualizando Dominio de Curso Dagua...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_UpdateDomainColumn();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Dominio de Curso Dagua Atualizado com Sucesso!\n')
@@ -2832,30 +2130,17 @@ class PghydroTools:
 			self.dlg.console.append('Ligando Indices...\n')
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pghydro.pghfn_TurnOnKeysIndex();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Indices Ligados com Sucesso!\n')
 			self.dlg.console.repaint()
 
 		if self.dlg.checkBox_UpdateWatershed.isChecked():
-			host = self.dlg.lineEdit_host.text()
-			port = self.dlg.lineEdit_port.text()
-			dbname = self.dlg.lineEdit_base.text()
-			schema = self.dlg.lineEdit_schema.text()
-			user = self.dlg.lineEdit_user.text()
-			password = self.dlg.lineEdit_password.text()
-			connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 			if self.dlg.checkBox_TurnOnKeysIndex.isChecked():
 				x=1
@@ -2864,60 +2149,40 @@ class PghydroTools:
 				self.dlg.console.append('Ligando Indices...\n')
 				self.dlg.console.repaint()
 
-				conn = psycopg2.connect(connection_str)
-				conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-				cur = conn.cursor()
 				sql = """
 				SELECT pghydro.pghfn_TurnOnKeysIndex();
 				"""
-				cur.execute(sql)
-				cur.close()
-				conn.commit()
-				conn.autocommit = True
-				conn.close()
+
+				self.execute_sql(sql)
 
 				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 				self.dlg.console.append('Indices Ligados com Sucesso!\n')
 				self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur_min = conn.cursor()
-			cur_max = conn.cursor()
 			sql_min = """
 			SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN(1);
 			"""
+
 			sql_max = """
 			SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN((SELECT pghydro.pghfn_numPfafstetterBasinCodeLevel()::integer));
 			"""
-			cur_min.execute(sql_min)
-			result_min = str(cur_min.fetchone()[0])
-			cur_min.close()
-			cur_max.execute(sql_max)
-			result_max = str(cur_max.fetchone()[0])
-			cur_max.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result_min = self.return_sql(sql_min)
+
+			result_max = self.return_sql(sql_max)
 
 			try:
 				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 				self.dlg.console.append("Atualizando Nivel "+result_max+" de Bacia...")
 				self.dlg.console.repaint()
 
-				conn = psycopg2.connect(connection_str)
-				conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-				cur = conn.cursor()
 				sql = """
 				TRUNCATE TABLE pghydro.pghft_watershed;
 				
 				SELECT pghydro.pghfn_updatewatersheddrainagearea((SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN((SELECT pghydro.pghfn_numPfafstetterBasinCodeLevel()::integer))));
 				"""
-				cur.execute(sql)
-				cur.close()
-				conn.commit()
-				conn.autocommit = True
-				conn.close()
+
+				self.execute_sql(sql)
 
 				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 				self.dlg.console.append("Nivel "+result_max+" de bacia Atualizado com Sucesso!")
@@ -2938,17 +2203,11 @@ class PghydroTools:
 					self.dlg.console.append("Atualizando Nivel "+str(count-1)+" de Bacia...")
 					self.dlg.console.repaint()
 
-					conn = psycopg2.connect(connection_str)
-					conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-					cur = conn.cursor()
 					sql = """
 					SELECT pghydro.pghfn_updatewatershed("""+str(count)+""");
 					"""
-					cur.execute(sql)
-					cur.close()
-					conn.commit()
-					conn.autocommit = True
-					conn.close()
+
+					self.execute_sql(sql)
 
 					self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 					self.dlg.console.append("Nivel "+str(count-1)+" de Bacia Atualizado com Sucesso!")
@@ -2963,13 +2222,6 @@ class PghydroTools:
 ###Export Data				
 				
     def UpdateExportTables(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Atualizando Dados de Saída...\n')
@@ -2979,17 +2231,11 @@ class PghydroTools:
 		self.dlg.console.append('Desligando Indices...\n')
 		self.dlg.console.repaint()
 
-		conn = psycopg2.connect(connection_str)
-		conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-		cur = conn.cursor()
 		sql = """
 		SELECT pghydro.pghfn_TurnOffKeysIndex();
 		"""
-		cur.execute(sql)
-		cur.close()
-		conn.commit()
-		conn.autocommit = True
-		conn.close()
+
+		self.execute_sql(sql)
 
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Indices desligados com Sucesso!\n')
@@ -2999,66 +2245,52 @@ class PghydroTools:
 		self.dlg.console.append('Ligando Indices...\n')
 		self.dlg.console.repaint()
 
-		conn = psycopg2.connect(connection_str)
-		conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-		cur = conn.cursor()
 		sql = """
 		SELECT pghydro.pghfn_TurnOnKeysIndex();
 		"""
-		cur.execute(sql)
-		cur.close()
-		conn.commit()
-		conn.autocommit = True
-		conn.close()
+
+		self.execute_sql(sql)
+
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Indices Ligados com Sucesso!\n')
 		self.dlg.console.repaint()
 
-		conn = psycopg2.connect(connection_str)
-		conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-		cur = conn.cursor()
 		sql = """
 		SELECT pgh_output.pghfn_UpdateExportTables();
 		"""
-		cur.execute(sql)
-		cur.close()
-		conn.commit()
-		conn.autocommit = True
-		conn.close()
+
+		self.execute_sql(sql)
+
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Dados de Saida Atualizados com Sucesso!\n')
 		self.dlg.console.repaint()
 
     def Start_Systematize_Hydronym(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Preparando Dados para Sistematizacao dos Hidronimos...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			SELECT pghydro.pghfn_TurnOffKeysIndex();
-			
+			"""
+
+			sql2 = """
 			ALTER TABLE pghydro.pghft_drainage_line
 			DROP COLUMN IF EXISTS drn_dra_cd_pfafstetterbasin,
 			DROP COLUMN IF EXISTS drn_wtc_cd_pfafstetterwatercourse,
 			DROP COLUMN IF EXISTS drn_wtc_gm_area;
+			"""
 
+			sql3 = """
 			ALTER TABLE pghydro.pghft_drainage_line
 			ADD COLUMN drn_dra_cd_pfafstetterbasin varchar,
 			ADD COLUMN drn_wtc_cd_pfafstetterwatercourse varchar,
 			ADD COLUMN drn_wtc_gm_area numeric;
+			"""
 
+			sql4 = """
 			DROP INDEX IF EXISTS pghydro.drn_pk_idx;
 
 			CREATE INDEX drn_pk_idx ON pghydro.pghft_drainage_line(drn_pk); 
@@ -3070,12 +2302,16 @@ class PghydroTools:
 			DROP INDEX IF EXISTS pghydro.dra_pk_idx;
 
 			CREATE INDEX dra_pk_idx ON pghydro.pghft_drainage_area(dra_pk); 
+			"""
 
+			sql5 = """
 			UPDATE pghydro.pghft_drainage_line drn
 			SET drn_dra_cd_pfafstetterbasin = dra.dra_cd_pfafstetterbasin
 			FROM pghydro.pghft_drainage_area dra
 			WHERE drn.drn_dra_pk = dra.dra_pk;
+			"""
 
+			sql6 = """
 			DROP INDEX IF EXISTS pghydro.drn_wtc_pk_idx;
 
 			CREATE INDEX drn_wtc_pk_idx ON pghydro.pghft_drainage_line(drn_wtc_pk); 
@@ -3083,17 +2319,23 @@ class PghydroTools:
 			DROP INDEX IF EXISTS pghydro.wtc_pk_idx;
 
 			CREATE INDEX wtc_pk_idx ON pghydro.pghft_watercourse(wtc_pk); 
+			"""
 
+			sql7 = """
 			UPDATE pghydro.pghft_drainage_line drn
 			SET drn_wtc_cd_pfafstetterwatercourse = wtc.wtc_cd_pfafstetterwatercourse
 			FROM pghydro.pghft_watercourse wtc
 			WHERE drn.drn_wtc_pk = wtc.wtc_pk;
+			"""
 
+			sql8 = """
 			UPDATE pghydro.pghft_drainage_line drn
 			SET drn_wtc_gm_area = wtc.wtc_gm_area
 			FROM pghydro.pghft_watercourse wtc
 			WHERE drn.drn_wtc_pk = wtc.wtc_pk;
+			"""
 
+			sql9 = """
 			DROP INDEX IF EXISTS pghydro.drn_pk_idx;
 			
 			DROP INDEX IF EXISTS pghydro.drn_dra_pk_idx;
@@ -3109,41 +2351,35 @@ class PghydroTools:
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
 
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
-
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			self.execute_sql(sql4)
+			self.execute_sql(sql5)
+			self.execute_sql(sql6)
+			self.execute_sql(sql7)
+			self.execute_sql(sql8)
+			self.execute_sql(sql9)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Dados Preparados para Sistematizacao com Sucesso!")
 			self.dlg.console.repaint()
+
 		except:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
 			self.dlg.console.repaint()
 		
     def Systematize_Hydronym(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Sistematizando Hidronimos...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_wtc_pk_idx;
 			
 			DROP INDEX IF EXISTS pghydro.drn_dra_pk_idx;
@@ -3155,9 +2391,13 @@ class PghydroTools:
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 			
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
-			
+			"""
+
+			sql2 = """
 			SELECT pgh_consistency.pghfn_systematize_hydronym();
-			
+			"""
+
+			sql3 = """
 			DROP INDEX IF EXISTS pghydro.drn_wtc_pk_idx;
 			
 			CREATE INDEX drn_wtc_pk_idx ON pghydro.pghft_drainage_line(drn_wtc_pk);
@@ -3177,17 +2417,18 @@ class PghydroTools:
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 			
 			CREATE INDEX drn_gm_idx ON pghydro.pghft_drainage_line USING GIST(drn_gm);
+			"""
 
+			sql4 = """
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
 
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
-
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
+			self.execute_sql(sql4)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Hidronimos Sistematizados com Sucesso!")
@@ -3198,23 +2439,13 @@ class PghydroTools:
 			self.dlg.console.repaint()
 
     def Update_OriginalHydronym(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Atualizando Hidronimos Originais...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 			
 			DROP INDEX IF EXISTS pghydro.drn_wtc_pk_idx;
@@ -3228,15 +2459,14 @@ class PghydroTools:
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
 			
 			ALTER TABLE pghydro.pghft_drainage_line DROP CONSTRAINT IF EXISTS drn_pk_pkey;
-			
-			SELECT pgh_consistency.pghfn_update_drn_nm();
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			sql2 = """
+			SELECT pgh_consistency.pghfn_update_drn_nm();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Hidronimos Originais Atualizados com Sucesso!\nRode Novamente a Sistematizacao de Nomes")
@@ -3247,55 +2477,37 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Check_ConfluenceHydronym(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Verificando Hidronimos Confluentes...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_nm_idx;
 			
 			CREATE INDEX drn_nm_idx ON pghydro.pghft_drainage_line(drn_nm); 
-			
+			"""
+
+			sql2 = """
 			SELECT pgh_consistency.pghfn_updateconfluencehydronymconistencytable();
 			
 			DROP INDEX IF EXISTS pghydro.drn_nm_idx;
-			
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Hidronimos Confluentes Atualizados Com Sucesso!')
 			self.dlg.console.repaint()
 			
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT count(id)
 			FROM pgh_consistency.pghft_confluencehydronym;
 			"""
-			cur.execute(sql)
-			result = str(cur.fetchone()[0])
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			result = self.return_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Hidronimos Confluentes: ")
@@ -3312,23 +2524,13 @@ class PghydroTools:
 			self.dlg.console.repaint()
 			
     def Stop_Systematize_Hydronym(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Processando Sistematizacao de Hidronimos...")
 			self.dlg.console.repaint()
 
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
-			sql = """
-			
+			sql1 = """
 			DROP INDEX IF EXISTS pghydro.dra_cd_pfafstetterbasin_idx;
 			
 			DROP INDEX IF EXISTS pghydro.wtc_cd_pfafstetterwatercourse_idx;
@@ -3337,17 +2539,19 @@ class PghydroTools:
 			DROP COLUMN IF EXISTS drn_dra_cd_pfafstetterbasin,
 			DROP COLUMN IF EXISTS drn_wtc_cd_pfafstetterwatercourse,
 			DROP COLUMN IF EXISTS drn_wtc_gm_area;
-
-			SELECT pghydro.pghfn_turnoffkeysindex();
-			
-			SELECT pghydro.pghfn_turnonkeysindex();
-
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			sql2 = """
+			SELECT pghydro.pghfn_turnoffkeysindex();
+			"""
+
+			sql3 = """
+			SELECT pghydro.pghfn_turnonkeysindex();
+			"""
+
+			self.execute_sql(sql1)
+			self.execute_sql(sql2)
+			self.execute_sql(sql3)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Processo de Sistematizacao de Hidronimos Realizado com Sucesso!")
@@ -3362,30 +2566,16 @@ class PghydroTools:
 		role = self.dlg.lineEdit_role.text()
 		role_password = self.dlg.lineEdit_role_password.text()
 
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Criando Usuario...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			CREATE USER """+role+""" WITH PASSWORD '"""+role_password+"""' SUPERUSER;
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Usuario Criado Com Sucesso!\n')
@@ -3396,7 +2586,6 @@ class PghydroTools:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
 			self.dlg.console.repaint()
-			
 			
     def Check_Role(self):
 		host = self.dlg.lineEdit_host.text()
@@ -3411,13 +2600,17 @@ class PghydroTools:
 			self.dlg.console.append("Verificando Usuarios...")
 			self.dlg.console.repaint()
 
+			conn = None
 			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+			conn.autocommit = True
 			cur = conn.cursor()
+
 			sql = """
 			SELECT usename FROM pg_user;
 			"""
+
 			cur.execute(sql)
+
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append("Usuarios: ")
 
@@ -3435,47 +2628,34 @@ class PghydroTools:
 				self.dlg.console.repaint()
 			
 			cur.close()
-			conn.commit()
-			conn.autocommit = True
 			conn.close()
+
 		except:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
 			self.dlg.console.repaint()
 
     def Enable_Role(self):
-
-		role = self.dlg.listWidget_role.selectedItems()[0].text()
-
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
+	
 		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+		role = self.dlg.listWidget_role.selectedItems()[0].text()
 
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Habilitando Usuario...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			GRANT ALL PRIVILEGES ON DATABASE """+dbname+""" TO """+role+""";
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Usuario Habilitado Com Sucesso:')
 			self.dlg.console.append(role)
 			self.dlg.console.repaint()
+
 		except:
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
@@ -3483,32 +2663,19 @@ class PghydroTools:
 
     def Disable_Role(self):
 
-		role = self.dlg.listWidget_role.selectedItems()[0].text()
-
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
 		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+		role = self.dlg.listWidget_role.selectedItems()[0].text()
 
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Desabilitando Usuario...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			REVOKE ALL PRIVILEGES ON DATABASE """+dbname+""" FROM """+role+""";
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Usuario Desabilitado Com Sucesso:')
@@ -3523,30 +2690,16 @@ class PghydroTools:
 
 		role = self.dlg.listWidget_role.selectedItems()[0].text()
 
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Excluindo Usuario...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			DROP USER IF EXISTS """+role+""";
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Usuario Excluido Com Sucesso!\n')
@@ -3559,31 +2712,17 @@ class PghydroTools:
 
     def Turn_ON_Audit(self):
 
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Ligando Auditoria...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 
 			sql = """
 			SELECT pgh_consistency.pghfn_turnonbackup();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Auditoria Ligada Com Sucesso!\n')
@@ -3595,30 +2734,16 @@ class PghydroTools:
 			
     def Turn_OFF_Audit(self):
 
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Desligando Auditoria...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pgh_consistency.pghfn_TurnOffBackup();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Auditoria Desligada Com Sucesso!\n')
@@ -3631,30 +2756,16 @@ class PghydroTools:
 
     def Reset_Drainage_Line_Audit(self):
 
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Limpando Auditoria de Drenagem...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pgh_consistency.pghfn_CleanDrainageLineBackupTables();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Auditoria de Drenagem Limpa Com Sucesso!\n')
@@ -3667,30 +2778,16 @@ class PghydroTools:
 
     def Reset_Drainage_Area_Audit(self):
 
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append('Limpando Auditoria de Bacia...\n')
 		self.dlg.console.repaint()
 		
 		try:
-			conn = psycopg2.connect(connection_str)
-			conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-			cur = conn.cursor()
 			sql = """
 			SELECT pgh_consistency.pghfn_CleanDrainageAreaBackupTables();
 			"""
-			cur.execute(sql)
-			cur.close()
-			conn.commit()
-			conn.autocommit = True
-			conn.close()
+
+			self.execute_sql(sql)
 
 			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 			self.dlg.console.append('Auditoria de Bacia Limpa Com Sucesso!\n')
