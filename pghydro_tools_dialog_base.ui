@@ -34,7 +34,7 @@
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
-     <string>Conectar SBDE</string>
+     <string>Connect Spatial Database</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
@@ -46,7 +46,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>1 - Informações da Conexão</string>
+      <string>1 - Connection Data</string>
      </property>
      <widget class="QLabel" name="label_1">
       <property name="geometry">
@@ -58,7 +58,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Máquina</string>
+       <string>Host</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -71,7 +71,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Porta</string>
+       <string>Port</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_3">
@@ -84,7 +84,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Base de dados</string>
+       <string>Database</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_4">
@@ -92,12 +92,12 @@
        <rect>
         <x>20</x>
         <y>160</y>
-        <width>46</width>
-        <height>13</height>
+        <width>61</width>
+        <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string>Usuário</string>
+       <string>Username</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_5">
@@ -110,7 +110,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Senha</string>
+       <string>Password</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_host">
@@ -191,7 +191,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Conectar</string>
+       <string>Connect</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_schema">
@@ -220,7 +220,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Esquema</string>
+       <string>Scheme</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_create_database">
@@ -233,15 +233,15 @@
        </rect>
       </property>
       <property name="text">
-       <string>Criar Banco de Dados Espaciais
- e PgHydro Schema</string>
+       <string>Create Spatial Database
+ And PgHydro Scheme</string>
       </property>
      </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_9">
     <attribute name="title">
-     <string>Importar Dados</string>
+     <string>Import Spatial Data</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
@@ -253,7 +253,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>2 - Importar Dados para o PgHydro Schema</string>
+      <string>2 - Import Geometry Table to PgHydro Scheme</string>
      </property>
      <widget class="QGroupBox" name="groupBox_3">
       <property name="geometry">
@@ -265,19 +265,19 @@
        </rect>
       </property>
       <property name="title">
-       <string>Drenagem</string>
+       <string>Drainage Line</string>
       </property>
       <widget class="QPushButton" name="pushButton_import_drainage_line">
        <property name="geometry">
         <rect>
          <x>120</x>
          <y>120</y>
-         <width>111</width>
+         <width>121</width>
          <height>23</height>
         </rect>
        </property>
        <property name="text">
-        <string>Importar Drenagem</string>
+        <string>Import Drainage Line</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_7">
@@ -290,7 +290,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Tabela Geométrica</string>
+        <string>Geometry Table</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_9">
@@ -303,7 +303,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atributo Com Nome</string>
+        <string>Name Column</string>
        </property>
       </widget>
       <widget class="QComboBox" name="input_drainage_line_table_MapLayerComboBox">
@@ -337,7 +337,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Bacia</string>
+       <string>Drainage Area</string>
       </property>
       <widget class="QLabel" name="label_10">
        <property name="geometry">
@@ -349,7 +349,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Tabela Geométrica</string>
+        <string>Geometry Table</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_import_drainage_area">
@@ -357,12 +357,12 @@
         <rect>
          <x>120</x>
          <y>120</y>
-         <width>111</width>
+         <width>121</width>
          <height>23</height>
         </rect>
        </property>
        <property name="text">
-        <string>Importar Bacia</string>
+        <string>Import Drainage Area</string>
        </property>
       </widget>
       <widget class="QComboBox" name="input_drainage_area_table_MapLayerComboBox">
@@ -380,7 +380,7 @@
    </widget>
    <widget class="QWidget" name="tab2">
     <attribute name="title">
-     <string>Consistir Drenagem</string>
+     <string>Consist Drainage Line</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_6">
      <property name="geometry">
@@ -388,11 +388,11 @@
        <x>10</x>
        <y>10</y>
        <width>201</width>
-       <height>281</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
-      <string>3.1 - Consistência Geométrica</string>
+      <string>3.1 - Geometric Consistency</string>
      </property>
      <widget class="QGroupBox" name="groupBox_8">
       <property name="geometry">
@@ -404,7 +404,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Não Simples</string>
+       <string>Non-Simple Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineIsNotSimple">
        <property name="geometry">
@@ -429,7 +429,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Simplificar</string>
+        <string>Simplify</string>
        </property>
       </widget>
      </widget>
@@ -443,7 +443,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Não Válida</string>
+       <string>Invalid Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineIsNotValid">
        <property name="geometry">
@@ -468,7 +468,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Validar</string>
+        <string>Validate</string>
        </property>
       </widget>
      </widget>
@@ -482,7 +482,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Verificar Tudo</string>
+       <string>Check All</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_DrainageLinePrecision">
@@ -508,7 +508,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>PRECISÃO:</string>
+       <string>PRECISION:</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_DrainageLineOffset">
@@ -547,7 +547,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Não Única</string>
+       <string>Non-Single Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineIsNotSingle">
        <property name="geometry">
@@ -572,7 +572,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Explodir</string>
+        <string>Explode</string>
        </property>
       </widget>
      </widget>
@@ -587,7 +587,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>3.2 - Consistência Topológica</string>
+      <string>3.2 - Topological Consistency - Part I</string>
      </property>
      <widget class="QPushButton" name="pushButton_Check_DrainageLineTopologyConsistencies_1">
       <property name="geometry">
@@ -599,7 +599,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Verificar Tudo</string>
+       <string>Check All</string>
       </property>
      </widget>
      <widget class="QGroupBox" name="groupBox_38">
@@ -612,7 +612,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Dentro de Geometria</string>
+       <string>Geometry WITHIN Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineWithinDrainageLine">
        <property name="geometry">
@@ -637,7 +637,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Excluir</string>
+        <string>Delete</string>
        </property>
       </widget>
      </widget>
@@ -651,7 +651,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Sobrepõe Geometria</string>
+       <string>Geometry OVERLAP Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineOverlapDrainageLine">
        <property name="geometry">
@@ -673,7 +673,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -687,7 +687,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Com Loop</string>
+       <string>Geometry With LOOPS </string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineLoops">
        <property name="geometry">
@@ -709,7 +709,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -724,7 +724,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>3.3 - Consistência Topológica</string>
+      <string>3.3 - Topological Consistency - Part II</string>
      </property>
      <widget class="QPushButton" name="pushButton_Check_DrainageLineTopologyConsistencies_2">
       <property name="geometry">
@@ -736,7 +736,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Verificar Tudo</string>
+       <string>Check All</string>
       </property>
      </widget>
      <widget class="QGroupBox" name="groupBox_40">
@@ -749,7 +749,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Cruza Geometria</string>
+       <string>Geometry CROSS Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineCrossDrainageLine">
        <property name="geometry">
@@ -772,7 +772,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Toca Geometria</string>
+       <string>Geometry TOUCH Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageTouchDrainageLine">
        <property name="geometry">
@@ -798,38 +798,38 @@
        </rect>
       </property>
       <property name="text">
-       <string>Quebrar</string>
+       <string>Break Lines</string>
       </property>
      </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_8">
     <attribute name="title">
-     <string>Consistir Arco-Nó</string>
+     <string>Consist Drainage Line Network</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_12">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>221</width>
+       <width>231</width>
        <height>201</height>
       </rect>
      </property>
      <property name="title">
-      <string>4.1 - Geração da Relação Arco-Nó</string>
+      <string>4.1 - Create Drainage Network</string>
      </property>
      <widget class="QGroupBox" name="groupBox_14">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>201</width>
+        <width>211</width>
         <height>51</height>
        </rect>
       </property>
       <property name="title">
-       <string>Nós com Valência = 2 (Pseudo-Nó)</string>
+       <string>Nodes with Valence = 2 (Pseudo-Node)</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_PointValenceValue2">
        <property name="geometry">
@@ -854,7 +854,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Unir Drenagens</string>
+        <string>Spatial Union</string>
        </property>
       </widget>
      </widget>
@@ -863,12 +863,12 @@
        <rect>
         <x>10</x>
         <y>110</y>
-        <width>201</width>
+        <width>211</width>
         <height>51</height>
        </rect>
       </property>
       <property name="title">
-       <string>Nós com Valência &gt;=4 (Confl. Múlt)</string>
+       <string>Nodes with Valence &gt;=4 (Multiple Confl.)</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_PointValenceValue4">
        <property name="geometry">
@@ -890,7 +890,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -904,7 +904,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Processar</string>
+       <string>Execute</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_29">
@@ -937,26 +937,26 @@
     <widget class="QGroupBox" name="groupBox_13">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>250</x>
        <y>10</y>
-       <width>201</width>
-       <height>81</height>
+       <width>191</width>
+       <height>111</height>
       </rect>
      </property>
      <property name="title">
-      <string>4.2 - Identificação dos Nós da Rede</string>
+      <string>4.2 - Identify Network Nodes</string>
      </property>
      <widget class="QPushButton" name="pushButton_UpdateShorelineStartingPoint">
       <property name="geometry">
        <rect>
         <x>60</x>
         <y>50</y>
-        <width>131</width>
+        <width>121</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Nó Início da Drenagem</string>
+       <string>Start Node*</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_UpdateShorelineEndingPoint">
@@ -964,12 +964,12 @@
        <rect>
         <x>60</x>
         <y>20</y>
-        <width>131</width>
+        <width>121</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Nó Fim da Drenagem</string>
+       <string>End Node</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_UpdateShorelineEndingPoint">
@@ -992,6 +992,19 @@
        </rect>
       </property>
      </widget>
+     <widget class="QLabel" name="label_40">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>* Only available on coast basin</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_16">
      <property name="geometry">
@@ -1003,7 +1016,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>4.3 - Continuidade e Direção de Fluxo</string>
+      <string>4.3 - Connectivity And Flow Direction</string>
      </property>
      <widget class="QGroupBox" name="groupBox_17">
       <property name="geometry">
@@ -1015,7 +1028,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Drenagens Desconexas</string>
+       <string>Geometries Disconnected</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineIsDisconnected">
        <property name="geometry">
@@ -1037,7 +1050,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -1051,7 +1064,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometrias Com Nó Divergente</string>
+       <string>Geometries With Divergent Nodes</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_PointDivergent">
        <property name="geometry">
@@ -1073,7 +1086,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -1087,14 +1100,14 @@
        </rect>
       </property>
       <property name="text">
-       <string>Processar</string>
+       <string>Execute</string>
       </property>
      </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
-     <string>Consistir Bacia</string>
+     <string>Consist Drainage Area</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_19">
      <property name="geometry">
@@ -1106,7 +1119,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>5.2 - Consistência Topológica</string>
+      <string>5.2 - Topological Consistency</string>
      </property>
      <widget class="QGroupBox" name="groupBox_23">
       <property name="geometry">
@@ -1118,7 +1131,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Com Auto-intersecção</string>
+       <string>Geometry OVERLAP Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaHaveSelfIntersection">
        <property name="geometry">
@@ -1143,7 +1156,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Remover</string>
+        <string>Remove</string>
        </property>
       </widget>
      </widget>
@@ -1157,7 +1170,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Dentro de Geometria</string>
+       <string>Geometry WITHIN Geometry</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaHaveDuplication">
        <property name="geometry">
@@ -1182,7 +1195,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Excluir</string>
+        <string>Delete</string>
        </property>
       </widget>
      </widget>
@@ -1196,7 +1209,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Verificar Tudo</string>
+       <string>Check All</string>
       </property>
      </widget>
     </widget>
@@ -1210,7 +1223,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>5.1 - Consistência Geométrica</string>
+      <string>5.1 - Geometric Consistency</string>
      </property>
      <widget class="QGroupBox" name="groupBox_44">
       <property name="geometry">
@@ -1222,7 +1235,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Não Simples</string>
+       <string>Non-Simple Geometry</string>
       </property>
       <widget class="QPushButton" name="pushButton_MakeDrainageAreaSimple">
        <property name="enabled">
@@ -1237,7 +1250,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Simplificar</string>
+        <string>Simplify</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaIsNotSimple">
@@ -1261,7 +1274,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Não Válida</string>
+       <string>Invalid Geometry</string>
       </property>
       <widget class="QPushButton" name="pushButton_MakeDrainageAreaValid">
        <property name="enabled">
@@ -1276,7 +1289,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Validar</string>
+        <string>Validate</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaIsNotValid">
@@ -1313,7 +1326,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>PRECISÃO:</string>
+       <string>PRECISION:</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_DrainageAreaOffset">
@@ -1352,7 +1365,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Verificar Tudo</string>
+       <string>Check All</string>
       </property>
      </widget>
      <widget class="QGroupBox" name="groupBox_43">
@@ -1365,7 +1378,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Geometria Não Única</string>
+       <string>Non-Single Geometry</string>
       </property>
       <widget class="QPushButton" name="pushButton_ExplodeDrainageArea">
        <property name="enabled">
@@ -1380,7 +1393,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Explodir</string>
+        <string>Explode</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaIsNotSingle">
@@ -1398,31 +1411,31 @@
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Drenagem x Bacia</string>
+     <string>Consist Drainage Line x Drainage Area</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_25">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>211</width>
+       <width>221</width>
        <height>261</height>
       </rect>
      </property>
      <property name="title">
-      <string>6 - Consistência Topológica</string>
+      <string>6 - Topological Consistency</string>
      </property>
      <widget class="QGroupBox" name="groupBox_27">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>191</width>
+        <width>201</width>
         <height>51</height>
        </rect>
       </property>
       <property name="title">
-       <string>Drenagem Sem Bacia</string>
+       <string>Drainage Line WITHOUT Drainage Area</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineNoDrainageArea">
        <property name="geometry">
@@ -1444,7 +1457,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -1453,12 +1466,12 @@
        <rect>
         <x>10</x>
         <y>100</y>
-        <width>191</width>
+        <width>201</width>
         <height>51</height>
        </rect>
       </property>
       <property name="title">
-       <string>Bacia Com +1 Drenagem</string>
+       <string>Drainage Area &gt;1:1 Drainage Line</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaMoreOneDrainageLine">
        <property name="geometry">
@@ -1480,7 +1493,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -1489,12 +1502,12 @@
        <rect>
         <x>10</x>
         <y>150</y>
-        <width>191</width>
+        <width>201</width>
         <height>51</height>
        </rect>
       </property>
       <property name="title">
-       <string>Drenagem Com +1 Bacia</string>
+       <string>Drainage Line &gt;1:1 Drainage Area</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineMoreOneDrainageArea">
        <property name="geometry">
@@ -1516,7 +1529,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Correção Manual</string>
+        <string>Manual Editing</string>
        </property>
       </widget>
      </widget>
@@ -1530,7 +1543,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Verificar Tudo</string>
+       <string>Check All</string>
       </property>
      </widget>
      <widget class="QGroupBox" name="groupBox_26">
@@ -1538,12 +1551,12 @@
        <rect>
         <x>10</x>
         <y>200</y>
-        <width>191</width>
+        <width>201</width>
         <height>51</height>
        </rect>
       </property>
       <property name="title">
-       <string>Bacia Sem Drenagem</string>
+       <string>Drainage Area WTHOUT Drainage Line</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaNoDrainageLine">
        <property name="geometry">
@@ -1568,7 +1581,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Unir Bacias</string>
+        <string>Spatial Union</string>
        </property>
       </widget>
      </widget>
@@ -1576,7 +1589,7 @@
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
-     <string>Informações Hidrográficas Finais</string>
+     <string>Final Hydrographic Information</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_31">
      <property name="geometry">
@@ -1588,7 +1601,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>7 - Gerar Informações Hidrográficas Finais</string>
+      <string>7 - Execute Final Hydrographic Information</string>
      </property>
      <widget class="QGroupBox" name="groupBox_32">
       <property name="geometry">
@@ -1600,7 +1613,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Processamento Principal</string>
+       <string>Main Procedures</string>
       </property>
       <widget class="QPushButton" name="pushButton_Principal_Procedure">
        <property name="geometry">
@@ -1612,7 +1625,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Processar</string>
+        <string>Execute</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="checkBox_CalculateDrainageLineLength">
@@ -1631,7 +1644,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Atualizar Comprimento da Drenagem</string>
+        <string>Update Drainage Line Length</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1647,7 +1660,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Área da Bacia Hidrográfica</string>
+        <string>Update Drainage Area Area</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1658,12 +1671,12 @@
         <rect>
          <x>10</x>
          <y>60</y>
-         <width>181</width>
+         <width>211</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>Calcular Distância à Foz da Bacia:</string>
+        <string>Update Sea Distance (OFFSET):</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1679,7 +1692,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Calcular Área a Montante</string>
+        <string>Update Upstream Area</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1695,7 +1708,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Drenagem a Montante</string>
+        <string>Update Upstream Drainage Line</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1706,12 +1719,12 @@
         <rect>
          <x>10</x>
          <y>120</y>
-         <width>171</width>
+         <width>221</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Drenagem a Jusante</string>
+        <string>Update Downstream Drainage Line</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1722,12 +1735,12 @@
         <rect>
          <x>10</x>
          <y>140</y>
-         <width>191</width>
+         <width>211</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>Codificar Bacias de Otto Pfafstetter</string>
+        <string>Calculate Otto Pfafstetter Basin Coding</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1743,7 +1756,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Código de Bacia de Otto Pfafstetter</string>
+        <string>Update Otto Pfafstetter Basin Coding:</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1759,7 +1772,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Curso D'Água</string>
+        <string>Update Water Course</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1775,7 +1788,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Pontos de Cursos D'Água</string>
+        <string>Update Water Course Points</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1791,7 +1804,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Calcular Ordem de Strahler</string>
+        <string>Update Strahler Order</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1852,7 +1865,7 @@
       <widget class="QLineEdit" name="lineEdit_factor_drainage_line_length">
        <property name="geometry">
         <rect>
-         <x>350</x>
+         <x>360</x>
          <y>20</y>
          <width>51</width>
          <height>20</height>
@@ -1865,7 +1878,7 @@
       <widget class="QLineEdit" name="lineEdit_factor_drainage_area_area">
        <property name="geometry">
         <rect>
-         <x>350</x>
+         <x>360</x>
          <y>40</y>
          <width>51</width>
          <height>20</height>
@@ -1880,12 +1893,12 @@
         <rect>
          <x>320</x>
          <y>20</y>
-         <width>31</width>
-         <height>16</height>
+         <width>41</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
-        <string>Fator:</string>
+        <string>Factor:</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_24">
@@ -1893,18 +1906,18 @@
         <rect>
          <x>320</x>
          <y>40</y>
-         <width>31</width>
-         <height>16</height>
+         <width>41</width>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
-        <string>Fator:</string>
+        <string>Factor:</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_distance_to_sea">
        <property name="geometry">
         <rect>
-         <x>190</x>
+         <x>200</x>
          <y>60</y>
          <width>51</width>
          <height>20</height>
@@ -1920,7 +1933,7 @@
       <widget class="QLineEdit" name="lineEdit_pfafstetter_basin_code">
        <property name="geometry">
         <rect>
-         <x>250</x>
+         <x>220</x>
          <y>160</y>
          <width>61</width>
          <height>20</height>
@@ -1943,7 +1956,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Código de Curso D'Água de Otto Pfafstetter</string>
+        <string>Update Otto Pfafstetter Water Course Code</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1959,7 +1972,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Inserir as Colunas com Codificação de Bacias de Otto Pfafstetter</string>
+        <string>Add Pfafstetter Basin Coding Columns</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1975,7 +1988,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Linha de Costa (se for o caso)</string>
+        <string>Update Shoreline (if exists)</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -1986,12 +1999,12 @@
         <rect>
          <x>430</x>
          <y>20</y>
-         <width>131</width>
+         <width>171</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>Ligar Índices, PKs e FKs</string>
+        <string>Turn On Indexes, PKs and FKs</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -2003,11 +2016,11 @@
          <x>430</x>
          <y>40</y>
          <width>181</width>
-         <height>17</height>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Dominialidade (opicional)</string>
+        <string>Update Water Course Domain</string>
        </property>
        <property name="checked">
         <bool>false</bool>
@@ -2023,7 +2036,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Atualizar Agregação de Bacias</string>
+        <string>Upddate Watersheds</string>
        </property>
       </widget>
      </widget>
@@ -2031,7 +2044,7 @@
    </widget>
    <widget class="QWidget" name="tab_6">
     <attribute name="title">
-     <string>Atualizar Dados de Saída</string>
+     <string>Update Output Geometry Tables</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_30">
      <property name="geometry">
@@ -2043,7 +2056,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>8 - Atualizar Dados de Saída</string>
+      <string>8 - Update Output Geometry Tables</string>
      </property>
      <widget class="QPushButton" name="pushButton_UpdateExportTables">
       <property name="geometry">
@@ -2055,14 +2068,14 @@
        </rect>
       </property>
       <property name="text">
-       <string>Processar</string>
+       <string>Execute</string>
       </property>
      </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_4">
     <attribute name="title">
-     <string>Hidronímia</string>
+     <string>Hydronymia</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_47">
      <property name="geometry">
@@ -2074,19 +2087,19 @@
       </rect>
      </property>
      <property name="title">
-      <string>9 - Sistematização da Hidronímia (nomes dos rios)</string>
+      <string>9 - Hydronymia Systematization (river names)</string>
      </property>
      <widget class="QGroupBox" name="groupBox_52">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>430</x>
         <y>20</y>
-        <width>171</width>
+        <width>201</width>
         <height>51</height>
        </rect>
       </property>
       <property name="title">
-       <string>9.4 Finalizar Sistematização</string>
+       <string>9.4 Finish Hydronymia Systematization</string>
       </property>
       <widget class="QPushButton" name="pushButton_Stop_Systematize_Hydronym">
        <property name="geometry">
@@ -2098,7 +2111,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Processar</string>
+        <string>Execute</string>
        </property>
       </widget>
      </widget>
@@ -2107,24 +2120,24 @@
        <rect>
         <x>220</x>
         <y>20</y>
-        <width>211</width>
+        <width>201</width>
         <height>201</height>
        </rect>
       </property>
       <property name="title">
-       <string>9.2 Edição das Hidronímias</string>
+       <string>9.2 Hydronymia Editing</string>
       </property>
       <widget class="QGroupBox" name="groupBox_51">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>140</y>
-         <width>191</width>
+         <width>181</width>
          <height>51</height>
         </rect>
        </property>
        <property name="title">
-        <string>9.2.3 Atualizar Nome Original</string>
+        <string>9.2.3 Update Original Names</string>
        </property>
        <widget class="QPushButton" name="pushButton_Update_OriginalHydronym">
         <property name="geometry">
@@ -2136,7 +2149,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Processar</string>
+         <string>Execute</string>
         </property>
        </widget>
       </widget>
@@ -2145,12 +2158,12 @@
         <rect>
          <x>10</x>
          <y>80</y>
-         <width>191</width>
+         <width>181</width>
          <height>51</height>
         </rect>
        </property>
        <property name="title">
-        <string>9.2.2 Revisar Nomes Sistematizados</string>
+        <string>9.2.2 Review Systematized Names</string>
        </property>
        <widget class="QLabel" name="label_39">
         <property name="geometry">
@@ -2162,7 +2175,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Correção Tabular Manual</string>
+         <string>Manual Table Editing</string>
         </property>
        </widget>
       </widget>
@@ -2171,12 +2184,12 @@
         <rect>
          <x>10</x>
          <y>20</y>
-         <width>191</width>
+         <width>181</width>
          <height>51</height>
         </rect>
        </property>
        <property name="title">
-        <string>9.2.1 Sistematizar Nomes</string>
+        <string>9.2.1 Systematize Names</string>
        </property>
        <widget class="QPushButton" name="pushButton_Systematize_Hydronym">
         <property name="geometry">
@@ -2188,7 +2201,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Processar</string>
+         <string>Execute</string>
         </property>
        </widget>
       </widget>
@@ -2203,7 +2216,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>9.1 Iniciar Sistematizacao</string>
+       <string>9.1 Start Hydronymia Systematization</string>
       </property>
       <widget class="QPushButton" name="pushButton_Start_Systematize_Hydronym">
        <property name="geometry">
@@ -2215,7 +2228,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Processar</string>
+        <string>Execute</string>
        </property>
       </widget>
      </widget>
@@ -2229,7 +2242,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>9.3 Hidrônimos Confluente</string>
+       <string>9.3 Confluent Hydronymia</string>
       </property>
       <widget class="QPushButton" name="pushButton_Check_ConfluenceHydronym">
        <property name="geometry">
@@ -2241,7 +2254,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Verificar</string>
+        <string>Check</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_ConfluenceHydronym">
@@ -2258,14 +2271,13 @@
        <property name="geometry">
         <rect>
          <x>90</x>
-         <y>50</y>
+         <y>40</y>
          <width>111</width>
          <height>31</height>
         </rect>
        </property>
        <property name="text">
-        <string>Correção Vetorial
- Manual</string>
+        <string>Manual Vector Editing</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -2276,7 +2288,7 @@
    </widget>
    <widget class="QWidget" name="tab_5">
     <attribute name="title">
-     <string>Edição Multi-Usuário</string>
+     <string>Multi-User Editing</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_53">
      <property name="geometry">
@@ -2288,7 +2300,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>10 - Edição Multi-Usuário</string>
+      <string>10 - Multi-User Editing</string>
      </property>
      <widget class="QGroupBox" name="groupBox_54">
       <property name="geometry">
@@ -2300,7 +2312,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>10.3 Gerenciar Auditoria</string>
+       <string>10.3 Log Management</string>
       </property>
       <widget class="QPushButton" name="pushButton_turn_off_audit">
        <property name="geometry">
@@ -2312,7 +2324,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Desligar</string>
+        <string>Turn Off</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_turn_on_audit">
@@ -2325,7 +2337,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Ligar</string>
+        <string>Turn On</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_reset_drainage_line_audit">
@@ -2338,7 +2350,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Limpar Auditoria Drenagem</string>
+        <string>Truncate Drainage Line Log</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_reset_drainage_area_audit">
@@ -2351,7 +2363,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Limpar Auditoria Bacia</string>
+        <string>Truncate Draniage Area Log</string>
        </property>
       </widget>
      </widget>
@@ -2365,7 +2377,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>10.2 Visualizar Usuário</string>
+       <string>10.2 View Users</string>
       </property>
       <widget class="QPushButton" name="pushButton_drop_role">
        <property name="geometry">
@@ -2377,7 +2389,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Excluir Usuário Selecionado</string>
+        <string>Drop Selected User</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_check_role">
@@ -2390,7 +2402,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Visualizar Usuários</string>
+        <string>View Users</string>
        </property>
       </widget>
       <widget class="QListWidget" name="listWidget_role">
@@ -2416,7 +2428,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Desabilitar Usuário Selecionado</string>
+        <string>Revoke Selected User</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_enable_role">
@@ -2429,7 +2441,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Habilitar Usuário Selecionado</string>
+        <string>Grant Selected User</string>
        </property>
       </widget>
      </widget>
@@ -2443,14 +2455,14 @@
        </rect>
       </property>
       <property name="title">
-       <string>10.1 Criar Usuário</string>
+       <string>10.1 Criate User</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_role">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>70</x>
          <y>20</y>
-         <width>131</width>
+         <width>111</width>
          <height>20</height>
         </rect>
        </property>
@@ -2465,15 +2477,15 @@
         </rect>
        </property>
        <property name="text">
-        <string>Criar</string>
+        <string>Create</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_role_password">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>70</x>
          <y>50</y>
-         <width>131</width>
+         <width>111</width>
          <height>20</height>
         </rect>
        </property>
@@ -2486,12 +2498,12 @@
         <rect>
          <x>10</x>
          <y>20</y>
-         <width>46</width>
-         <height>13</height>
+         <width>61</width>
+         <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>Usuário:</string>
+        <string>Username:</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_6">
@@ -2499,12 +2511,12 @@
         <rect>
          <x>10</x>
          <y>50</y>
-         <width>46</width>
-         <height>13</height>
+         <width>51</width>
+         <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>Senha:</string>
+        <string>Password:</string>
        </property>
       </widget>
      </widget>
@@ -2512,7 +2524,7 @@
    </widget>
    <widget class="QWidget" name="tab_7">
     <attribute name="title">
-     <string>Versão</string>
+     <string>Version</string>
     </attribute>
     <widget class="QLabel" name="label_11">
      <property name="geometry">
@@ -2573,7 +2585,7 @@
       </font>
      </property>
      <property name="text">
-      <string>PgHydro Tools Versão 2.0.2</string>
+      <string>PgHydro Tools Version 2.1</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
