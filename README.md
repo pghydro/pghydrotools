@@ -10,7 +10,9 @@ To use this plugin, you have to install the PgHydro extension for PostgreSQL/Pos
 
 The master branch has the latest minor release. (2.0.1)
 
-The develop branch has the next minor release. (2.0.2-dev)
+The develop branch has the next minor release. (2.1-dev)
+
+Next LTR: version 2.2 (November 2017)
 
 # INTRODUCTION
 
