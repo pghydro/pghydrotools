@@ -10,7 +10,7 @@
 name=Pghydro Tools
 qgisMinimumVersion=2.0
 description=PgHydro Tools Interface for PgHydro Extension for PostgreSQL/PostGIS
-version=2.0.2
+version=2.1
 author=PgHydro Team
 email=pghydro.project@gmail.com
 
@@ -27,6 +27,8 @@ repository=www.github.com/pghydro/pghydrotools
 # changelog=
 	2.0.1 - "No module named resources_rc" fixed.
 	2.0.2 - Execute and Return Queries update.
+	2.1 - Translate to English
+		- Creation of Print_Message_Console Function
 			...
 	
 # Tags are comma separated with spaces allowed

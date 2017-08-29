@@ -215,7 +215,6 @@ class PghydroTools:
             callback=self.run,
             parent=self.iface.mainWindow())
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -247,9 +246,7 @@ class PghydroTools:
 			conn.close()
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def return_sql(self, sql):
 		host = self.dlg.lineEdit_host.text()
@@ -272,10 +269,13 @@ class PghydroTools:
 			return result
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
+    def print_console_message(self, message):
+
+		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
+		self.dlg.console.append(message)
+		self.dlg.console.repaint()
 			
     def create_database(self):
 		host = self.dlg.lineEdit_host.text()
@@ -285,10 +285,8 @@ class PghydroTools:
 		password = self.dlg.lineEdit_password.text()
 		postgres = 'postgres'
 		connection_str_postgres = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, postgres, user, password)
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append("Criando Banco de Dados e Extensoes do PgHydro. Aguarde...")
-		self.dlg.console.repaint()
+		
+		self.print_console_message("Creating Spatial Database and Pghydro Extension. Please, Wait...")
 
 		try:
 			conn = psycopg2.connect(connection_str_postgres)
@@ -298,12 +296,9 @@ class PghydroTools:
 			createdatabase = """
 			CREATE DATABASE """+dbname+""";
 			"""
-
 			cur.execute(createdatabase)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Banco de Dados Criado Com Sucesso!\n")
-			self.dlg.console.repaint()
+			
+			self.print_console_message("Database Created With Success!\n")
 			
 			cur.close()
 			conn.close()
@@ -322,30 +317,25 @@ class PghydroTools:
 			"""
 			
 			self.execute_sql(create_spatial_database)
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Banco de Dados Espaciais Criado Com Sucesso!\n")
-			self.dlg.console.repaint()
-			self.execute_sql(create_pghydro)
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Extensao PgHydro Criada Com Sucesso!\n")
-			self.dlg.console.repaint()
-			self.execute_sql(create_pgh_consistency)
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Extensao PgHydro Consistency Criada Com Sucesso!\n")
-			self.dlg.console.repaint()
-			self.execute_sql(create_pgh_output)
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Extensao PgHydro Output Criada Com Sucesso!\n")
-			self.dlg.console.repaint()
 			
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Banco de Dados Espaciais e Extensoes do PgHydro Criadas Com Sucesso!\n")
-			self.dlg.console.repaint()
+			self.print_console_message("Spatial Database Successfully Created!\n")
+			
+			self.execute_sql(create_pghydro)
+			
+			self.print_console_message("PgHydro Extension successfully Created!\n")
+			
+			self.execute_sql(create_pgh_consistency)
+			
+			self.print_console_message("PgHydro Consistency Extension Successfully Created!\n")
+			
+			self.execute_sql(create_pgh_output)
+			
+			self.print_console_message("PgHydro Output Extension Successfully Created!\n")
+			
+			self.print_console_message("Spatial Database and Pghydro Extensions Successfully Created!\n")
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 		
     def connect_database(self):
 		host = self.dlg.lineEdit_host.text()
@@ -356,22 +346,16 @@ class PghydroTools:
 		password = self.dlg.lineEdit_password.text()
 		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
 
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append("Conectando ao Banco de Dados. Aguarde...")
-		self.dlg.console.repaint()
+		self.print_console_message('Connecting to Database. Please, wait...')
 		
 		try:
 			conn = psycopg2.connect(connection_str)
 			conn.close()
 
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Conexao Realizada Com Sucesso!\n")
-			self.dlg.console.repaint()
+			self.print_console_message('Database Successfully Connected!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 ###Input Drainage Line
 		
@@ -387,41 +371,30 @@ class PghydroTools:
 			input_drainage_line_table_attribute_name = self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.currentText()
 			input_drainage_line_table_attribute_geom = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).geometryColumn ()
 		
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Importando Trechos de Drenagem...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Importing Drainage Lines. Please, wait...\n')
 
 			self.dlg.console.append('SCHEMA: '+input_drainage_line_table_schema)
 			self.dlg.console.append('TABELA GEOMETRICA: '+input_drainage_line_table)
 			self.dlg.console.append('COLUNA COM NOME: '+input_drainage_line_table_attribute_name)
 			self.dlg.console.append('COLUNA GEOMETRICA: '+input_drainage_line_table_attribute_geom)
-			self.dlg.console.repaint()
 		
 			sql = """
 			SELECT pghydro.pghfn_input_data_drainage_line('"""+input_drainage_line_table_schema+"""','"""+input_drainage_line_table+"""','"""+input_drainage_line_table_attribute_geom+"""','"""+input_drainage_line_table_attribute_name+"""');
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Importacao dos Trechos de Drenagem Realizada Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Lines Successfully Imported!\n')
 
 		except:
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 ###Input Drainage Area
 			
     def import_drainage_area(self):
 
 		try:
-	
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Importando Areas de Contribuicao Hidrografica...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Importing Drainage Areas. Please, wait...\n')
 
 			layers = self.iface.legendInterface().layers()
 			selectedLayerIndex = self.dlg.input_drainage_area_table_MapLayerComboBox.currentIndex()
@@ -429,14 +402,12 @@ class PghydroTools:
 			input_drainage_area_table_schema = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).schema()
 			input_drainage_area_table = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).table()
 			input_drainage_area_table_attribute_geom = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).geometryColumn ()
-		
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Bacias...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Drainage Areas. Please, wait...\n')
 
-			self.dlg.console.append('SCHEMA: '+input_drainage_area_table_schema)
-			self.dlg.console.append('TABELA GEOMETRICA: '+input_drainage_area_table)
-			self.dlg.console.append('COLUNA GEOMETRICA: '+input_drainage_area_table_attribute_geom)
+			self.dlg.console.append('SCHEME: '+input_drainage_area_table_schema)
+			self.dlg.console.append('GEOMETRIC TABLE: '+input_drainage_area_table)
+			self.dlg.console.append('GEOMETRIC COLUMN: '+input_drainage_area_table_attribute_geom)
 			self.dlg.console.repaint()
 		
 			sql = """
@@ -444,23 +415,19 @@ class PghydroTools:
 			"""
 			self.execute_sql(sql)
 		
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Importacao das Bacias Realizada Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Areas Successfully Imported!\n')
+			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 #####Consistency Drainage Line			
 			
     def Check_DrainageLineIsNotSingle(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Geometrias Nao Unicas...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Non-Single Geometries. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -468,9 +435,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Nao Unicas: ")
+			
+			self.dlg.console.append("Non-Single Geometries: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -480,18 +446,14 @@ class PghydroTools:
 				self.dlg.pushButton_ExplodeDrainageLine.setEnabled(True)
 			else:
 				self.dlg.pushButton_ExplodeDrainageLine.setEnabled(False)			
+
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
-			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def ExplodeDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Explodindo Feições Nao Unicas...")
-			self.dlg.console.repaint()
+			self.print_console_message("Exploding Non-Single Geometries. Please, wait...")
 
 			sql = """
 			SELECT pgh_consistency.pghfn_explodedrainageline();
@@ -503,21 +465,15 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineIsNotSingle.repaint()
 			self.dlg.pushButton_ExplodeDrainageLine.setEnabled(False)			
 			
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Drenagens Explodidas com sucesso!\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Geometries Successfully Exploded!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageLineIsNotSimple(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Geometrias Nao Simples...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Non-Simple Geometries. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -525,9 +481,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Nao Simples: ")
+			
+			self.dlg.console.append("Non-Simple Geometries: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -539,16 +494,12 @@ class PghydroTools:
 				self.dlg.pushButton_MakeDrainageLineSimple.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def MakeDrainageLineSimple(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Simplificando Feicoes Nao Simples...")
-			self.dlg.console.repaint()
+			self.print_console_message("Simplifying Non-Simple Geometries. Please, wait...")
 
 			sql = """
 			SELECT pgh_consistency.pghfn_makedrainagelinesimple();
@@ -560,21 +511,15 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineIsNotSimple.repaint()
 			self.dlg.pushButton_MakeDrainageLineSimple.setEnabled(False)
 			
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Feicoes Simplificadas com sucesso!\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Non-Simple Geometries Successfully Simpliflyed!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageLineIsNotValid(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Geometrias Nao Validas...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Invalid Geometries. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -582,9 +527,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Nao Validas: ")
+			
+			self.dlg.console.append("Invalid Geometrie: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -596,16 +540,12 @@ class PghydroTools:
 				self.dlg.pushButton_MakeDrainageLineValid.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def MakeDrainageLineValid(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Validando Feicoes Nao Validas...")
-			self.dlg.console.repaint()
+			self.print_console_message("Validating Invalid Geometries. Please, wait...")
 
 			sql = """
 			SELECT pgh_consistency.pghfn_makedrainagelinevalid();
@@ -616,15 +556,11 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineIsNotValid.setText('')	
 			self.dlg.lineEdit_Check_DrainageLineIsNotValid.repaint()
 			self.dlg.pushButton_MakeDrainageLineValid.setEnabled(False)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Feicoes Validadas com sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Geometries Successfully Validated!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Check_DrainageLineGeometryConsistencies(self):
 
@@ -632,9 +568,7 @@ class PghydroTools:
 		DrainageLineOffset = self.dlg.lineEdit_DrainageLineOffset.text()
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Consistencia Topologica...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Topological Consistency. Please, wait...\n')
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
@@ -673,22 +607,17 @@ class PghydroTools:
 			self.Check_DrainageLineIsNotSimple()
 			self.Check_DrainageLineIsNotValid()
 			self.Check_DrainageLineIsNotSingle()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Consistencia Topologica Verificada!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Topological Consistency Successfully Checked!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
+			
 			
     def Check_DrainageLineWithinDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Geometria Dentro de Geometria...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Geometry WITHIN Geometry. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -696,9 +625,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Dentro de Geometrias: ")
+			
+			self.dlg.console.append("Geometry WITHIN Geometry: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -711,16 +639,12 @@ class PghydroTools:
 				self.dlg.pushButton_DeleteDrainageLineWithinDrainageLine.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def DeleteDrainageLineWithinDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Excluindo Geometrias Dentro de Geometrias...")
-			self.dlg.console.repaint()
+			self.print_console_message("Deleting Geometry WITHIN Geometry. Please, wait...")
 
 			sql = """
 			SELECT pgh_consistency.pghfn_deletedrainagelinewithindrainageline();
@@ -731,21 +655,15 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineWithinDrainageLine.repaint()
 			self.dlg.pushButton_DeleteDrainageLineWithinDrainageLine.setEnabled(False)			
 			
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Geometrias Exlcuidas com Sucesso!\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Geometries Successfully Deleted!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Check_DrainageLineOverlapDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Geometria Sobreposta a Geometria...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Geometry OVERLAP Geometry. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -753,9 +671,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Sobrepostas a Geometrias: ")
+			
+			self.dlg.console.append("Geometry OVERLAP Geometry: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -763,16 +680,12 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineOverlapDrainageLine.repaint()
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageLineLoops(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Loops...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking LOOPS. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -780,9 +693,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Com Loops: ")
+			
+			self.dlg.console.append("Geometries with LOOPS: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -790,16 +702,12 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineLoops.repaint()
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Check_DrainageLineTopologyConsistencies_1(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Consistencia Topologica Parte 1...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Topological Consistency Part I. Please, wait...\n')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyTopologyTables_1();
@@ -810,22 +718,17 @@ class PghydroTools:
 			self.Check_DrainageLineWithinDrainageLine()
 			self.Check_DrainageLineOverlapDrainageLine()
 			self.Check_DrainageLineLoops()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Consistencia Topologica Parte 1 Verificada!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Topological Consistency Part I Successfully Checked!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageLineCrossDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Geometrias Que Cruzam Geometrias...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Geometry CROSS Geometry. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -833,9 +736,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Com Cruzamento: ")
+			
+			self.dlg.console.append("Geometry CROSS Geometry: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -848,16 +750,13 @@ class PghydroTools:
 				self.dlg.pushButton_BreakDrainageLines.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
+			
 
     def Check_DrainageTouchDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Geometrias Que Tocam Geometrias...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Geometry TOUCH Geometry. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -865,9 +764,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Que se Tocam: ")
+			
+			self.dlg.console.append("Geometry TOUCH Geometry: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -877,16 +775,13 @@ class PghydroTools:
 				self.dlg.pushButton_BreakDrainageLines.setEnabled(True)
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
+						
 			
     def Check_DrainageLineTopologyConsistencies_2(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Consistencia Topologica Parte 2...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Topological Consistency Part II. Please wait...\n')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyTopologyTables_2();
@@ -896,24 +791,18 @@ class PghydroTools:
 
 			self.Check_DrainageLineCrossDrainageLine()
 			self.Check_DrainageTouchDrainageLine()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Consistencia Topologica Parte 2 Verificada!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Topological Consistency Part II Successfully Checked!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def BreakDrainageLines(self):
 
 		DrainageLinePrecision = self.dlg.lineEdit_DrainageLinePrecision.text()
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Quebrando Geometrias...")
-			self.dlg.console.repaint()
+			self.print_console_message("Breaking Geometries. Please, wait...")
 
 			sql1 = """
 			SELECT pgh_consistency.pghfn_CreateDrainageLineVertexIntersections("""+DrainageLinePrecision+""");
@@ -931,9 +820,7 @@ class PghydroTools:
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
 			
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Geometrias Quebradas Com Sucesso!\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Geometries Successfully Broken!\n')
 
 			self.dlg.lineEdit_Check_DrainageLineCrossDrainageLine.setText('')	
 			self.dlg.lineEdit_Check_DrainageLineCrossDrainageLine.repaint()
@@ -942,16 +829,13 @@ class PghydroTools:
 			self.dlg.pushButton_BreakDrainageLines.setEnabled(False)			
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 		
     def Check_PointValenceValue2(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Pseudos Nos (Valencia = 2)...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Pseudo-Nodes (Valence = 2)...")
 
 			sql = """
 			SELECT count(id)
@@ -959,9 +843,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Pseudos Nos (Valencia = 2): ")
+			
+			self.dlg.console.append("Pseudo-Nodes (Valence = 2): ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -974,16 +857,12 @@ class PghydroTools:
 				self.dlg.pushButton_UnionDrainageLineValence2.setEnabled(False)			
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def UnionDrainageLineValence2(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Unindo Drenagens...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Uniting Drainage Lines. Please, wait...\n')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_uniondrainagelinevalence2();
@@ -994,22 +873,16 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_PointValenceValue2.setText('')
 			self.dlg.lineEdit_Check_PointValenceValue2.repaint()
 			self.dlg.pushButton_UnionDrainageLineValence2.setEnabled(False)			
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Drenagens Unidas com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Lines Successfully United!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_PointValenceValue4(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Confluencias Multiplas (Valencia = 4)...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Multiple Confluences (Valence = 4)...")
 
 			sql = """
 			SELECT count(id)
@@ -1017,9 +890,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Confluencias Multiplas (Valencia = 4): ")
+			
+			self.dlg.console.append("Multiple Confluences (Valence = 4): ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1027,18 +899,14 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_PointValenceValue4.repaint()
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Execute_Network_Topology(self):
 
 		DrainagePointOffset = self.dlg.lineEdit_DrainagePointOffset.text()
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Executando Topologia de Rede...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Creating Drainage Line Network. Please, wait...\n')
 		
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drp_gm_idx;
@@ -1080,69 +948,52 @@ class PghydroTools:
 			
 			self.Check_PointValenceValue2()
 			self.Check_PointValenceValue4()
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Topologia de Rede Executada Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Line Network Successfully Created!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def UpdateShorelineEndingPoint(self):
 
 		UpdateShorelineEndingPoint = self.dlg.lineEdit_UpdateShorelineEndingPoint.text()
-		
+
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Identificando "No Fim da Drenagem"...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Identifying "End Node". Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdateShorelineEndingPoint("""+UpdateShorelineEndingPoint+""");
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('"No Fim da Drenagem" Identificada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('"End Node" Successfully Identified!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def UpdateShorelineStartingPoint(self):
 
 		UpdateShorelineStartingPoint = self.dlg.lineEdit_UpdateShorelineStartingPoint.text()
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Identificando "No Inicio da Drenagem"...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Identifying "Start Node"...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdateShorelineStartingPoint("""+UpdateShorelineStartingPoint+""");
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('"No Inicio da Drenagem" Identificada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('"Start Node" Successfully Identified!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageLineIsDisconnected(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Trechos Desconexos...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Disconnected Drainage Lines. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -1150,9 +1001,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Trechos Desconexos: ")
+		
+			self.dlg.console.append("Disconnected Drainage Lines: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1160,16 +1010,12 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineIsDisconnected.repaint()
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Check_PointDivergent(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Pontos Divergentes...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Divergent Points...')
 
 			sql = """
 			SELECT count(id)
@@ -1177,9 +1023,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Pontos Divergentes: ")
+			
+			self.dlg.console.append("Divergent Points: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1187,16 +1032,12 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_PointDivergent.repaint()
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Execute_Flow_Direction(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Executando Direcao de Fluxo...\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Calculating Flow Direction. Please, wait...\n')
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drp_gm_idx;
@@ -1238,24 +1079,18 @@ class PghydroTools:
 
 			self.Check_DrainageLineIsDisconnected()
 			self.Check_PointDivergent()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Direcao de Fluxo Concluida\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Flow Direction Successfully Calculated!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 ###Drainage Area Consistency
 			
     def Check_DrainageAreaIsNotSingle(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Geometrias Nao Unicas...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Non-Single Geometries. Please, wait...')
 
 			sql = """
 			SELECT count(id)
@@ -1263,9 +1098,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Nao Unicas: ")
+			
+			self.dlg.console.append("Non-Single Geometries: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1278,43 +1112,32 @@ class PghydroTools:
 				self.dlg.pushButton_ExplodeDrainageArea.setEnabled(False)
 				
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
-			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def ExplodeDrainageArea(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Explodindo Geometrias Nao Unicas...')
-			self.dlg.console.repaint()
-
+			self.print_console_message('Exploding Non-Single Geometries. Please, wait...')
+			
 			sql = """
 			SELECT pgh_consistency.pghfn_explodedrainagearea();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Bacias Explodidas com sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Geometries Successfully Exploded!\n')
 			
 			self.dlg.lineEdit_Check_DrainageAreaIsNotSingle.setText('')
 			self.dlg.lineEdit_Check_DrainageAreaIsNotSingle.repaint()
 			self.dlg.pushButton_ExplodeDrainageArea.setEnabled(False)			
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageAreaIsNotSimple(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Geometrias Nao Simples...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Non-Simple Geometries...')
 
 			sql = """
 			SELECT count(id)
@@ -1322,9 +1145,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Nao Simples: ")
+			
+			self.dlg.console.append("Non-Simple Geometries: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1337,42 +1159,32 @@ class PghydroTools:
 				self.dlg.pushButton_MakeDrainageAreaSimple.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def MakeDrainageAreaSimple(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Simplificando Geometrias Nao Simples...')
-			self.dlg.console.repaint()
+			self.print_console_message('Simplifying Non-Simple Geometries. Please, wait...')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_makedrainageareasimple();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Bacias Simplificadas com sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Non-Simple Geometries Successfully Simplifyed!\n')
 			
 			self.dlg.lineEdit_Check_DrainageAreaIsNotSimple.setText('')	
 			self.dlg.lineEdit_Check_DrainageAreaIsNotSimple.repaint()
 			self.dlg.pushButton_MakeDrainageAreaSimple.setEnabled(False)			
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()					
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageAreaIsNotValid(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Geometrias Nao Validas...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Invalid Geometries...')
 
 			sql = """
 			SELECT count(id)
@@ -1380,9 +1192,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Nao Validas: ")
+			
+			self.dlg.console.append("Invalid Geometries: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1395,48 +1206,37 @@ class PghydroTools:
 				self.dlg.pushButton_MakeDrainageAreaValid.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def MakeDrainageAreaValid(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Validando Geometrias Nao Validas...')
-			self.dlg.console.repaint()
+			self.print_console_message('Validating Invalid Geometries. Please, wait...')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_makedrainageareavalid();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Bacias Validadas Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Invalid Geometries Successfully Validated!\n')
 			
 			self.dlg.lineEdit_Check_DrainageAreaIsNotValid.setText('')	
 			self.dlg.lineEdit_Check_DrainageAreaIsNotValid.repaint()
 			self.dlg.pushButton_MakeDrainageAreaValid.setEnabled(False)			
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()		
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Check_DrainageAreaGeometryConsistencies(self):
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Verificando Consistencia Topologica\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Checking Geometric Consistency. Please, wait...\n')
+		
 		DrainageAreaPrecision = self.dlg.lineEdit_DrainageAreaPrecision.text()
 		DrainageAreaOffset = self.dlg.lineEdit_DrainageAreaOffset.text()
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Consistencias Topologicas...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Geometric Consistency. Please, wait...\n')
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.dra_gm_idx;
@@ -1486,23 +1286,16 @@ class PghydroTools:
 			self.Check_DrainageAreaIsNotSimple()
 			self.Check_DrainageAreaIsNotValid()
 			self.Check_DrainageAreaIsNotSingle()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Consistencia Topologica Verificada Com Sucesso\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Geometric Consistency Successfully Checked!\n')
 
 		except:
-			QMessageBox.information(self.iface.mainWindow(),"AVISO","Conexao Nao Realizada")
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageAreaHaveSelfIntersection(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Geometrias Com auto-interseccao...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Geometry OVERLAP Geometry. Please, wait...')
 
 			sql = """
 			SELECT count(id)
@@ -1510,9 +1303,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Com Auto-interseccao: ")
+			
+			self.dlg.console.append("Geometry OVERLAP Geometry: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1525,43 +1317,32 @@ class PghydroTools:
 				self.dlg.pushButton_RemoveDrainageAreaOverlap.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def RemoveDrainageAreaOverlap(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Removendo Geometrias Sobrepostas...')
-			self.dlg.console.repaint()
+			self.print_console_message('Updating OVERLAP Geometries. Please, wait...')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_removedrainageareaoverlap();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Sobreposicoes Geometricas Removidas Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Overlap Geometries Successfully Updated!\n')
 
 			self.dlg.lineEdit_Check_DrainageAreaHaveSelfIntersection.setText('')	
 			self.dlg.lineEdit_Check_DrainageAreaHaveSelfIntersection.repaint()
 			self.dlg.pushButton_RemoveDrainageAreaOverlap.setEnabled(False)			
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()		
-
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageAreaWithinDrainageArea(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Geometrias Duplicadas...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Geometry WITHIN Geometry. Please, wait...')
 
 			sql = """
 			SELECT count(id)
@@ -1569,9 +1350,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Geometrias Duplicadas: ")
+			
+			self.dlg.console.append("Geometry WITHIN Geometry: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1584,42 +1364,32 @@ class PghydroTools:
 				self.dlg.pushButton_DeleteDrainageAreaWithinDrainageArea.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def DeleteDrainageAreaWithinDrainageArea(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Excluindo Geometrias Dentro de Geometrias...')
-			self.dlg.console.repaint()
+			self.print_console_message('Deleting Geometry WITHIN Geometry. Please, wait...')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_deletedrainageareawithindrainagearea();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Geometrias Dentro de Geometrias Excluidas Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Geometry WITHIN Geometry Successfully Deleted!\n')
 			
 			self.dlg.lineEdit_Check_DrainageAreaHaveDuplication.setText('')	
 			self.dlg.lineEdit_Check_DrainageAreaHaveDuplication.repaint()
 			self.dlg.pushButton_DeleteDrainageAreaWithinDrainageArea.setEnabled(False)			
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()		
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageAreaTopologyConsistencies(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Verificando Topologia das Geometrias...')
-			self.dlg.console.repaint()
+			self.print_console_message('Checking Topological Geometry. Please, wait...')
 
 			sql = """
 			SELECT pgh_consistency.pghfn_updatedrainageareaconsistencytopologytables();
@@ -1629,24 +1399,18 @@ class PghydroTools:
 
 			self.Check_DrainageAreaWithinDrainageArea()
 			self.Check_DrainageAreaHaveSelfIntersection()
-		
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Topologia das Geometrias Verificada Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Topological Geometry Successfully Checked!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()		
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 ###Drainage Line x Drainage Area Consistency
 
     def Check_DrainageAreaNoDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Bacias Sem Drenagem...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Drainage Area Without Drainage Line. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -1654,9 +1418,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Bacias Sem Drenagem: ")
+			
+			self.dlg.console.append("Drainage Area Without Drainage Line: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1668,42 +1431,32 @@ class PghydroTools:
 				self.dlg.pushButton_Union_DrainageAreaNoDrainageLine.setEnabled(False)
 				
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Union_DrainageAreaNoDrainageLine(self):
 		
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Unindo Bacias Sem Drenagem...")
-			self.dlg.console.repaint()
+			self.print_console_message("Uniting Drainage Area Without Drainage Line. Please, wait...")
 
 			sql = """
 			SELECT pgh_consistency.pghfn_uniondrainageareanodrainageline();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Bacias Sem Drenagem Unidas Com sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Area Without Drainage Line Successfully United!\n')
 
 			self.dlg.lineEdit_Check_DrainageAreaNoDrainageLine.setText('')
 			self.dlg.lineEdit_Check_DrainageAreaNoDrainageLine.repaint()
 			self.dlg.pushButton_Union_DrainageAreaNoDrainageLine.setEnabled(False)			
 		
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageLineNoDrainageArea(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Drenagens Sem Bacia...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Drainage Line Without Drainage Area. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -1711,25 +1464,21 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Drenagens Sem Bacia: ")
+			
+			self.dlg.console.append("Drainage Line Without Drainage Area: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
 			self.dlg.lineEdit_Check_DrainageLineNoDrainageArea.setText(result)	
 			self.dlg.lineEdit_Check_DrainageLineNoDrainageArea.repaint()
+
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Check_DrainageAreaMoreOneDrainageLine(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Bacias Com Mais De Uma Drenagem...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Drainage Area >1:1 Drainage Line. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -1737,9 +1486,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Bacias Com Mais De Uma Drenagem: ")
+			
+			self.dlg.console.append("Drainage Area >1:1 Drainage Line: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1747,16 +1495,12 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageAreaMoreOneDrainageLine.repaint()
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Check_DrainageLineMoreOneDrainageArea(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Drenagens Com Mais De Uma Bacia...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Drainage Line >1:1 Drainage Area. Please, wait...")
 
 			sql = """
 			SELECT count(id)
@@ -1764,9 +1508,8 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Drenagens Com Mais De Uma Bacia: ")
+			
+			self.dlg.console.append("Drainage Line >1:1 Drainage Area: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
@@ -1774,16 +1517,12 @@ class PghydroTools:
 			self.dlg.lineEdit_Check_DrainageLineMoreOneDrainageArea.repaint()
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_DrainageAreaDrainageLineConsistencies(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Consistencia Topologica...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Topological Consistency. Please, wait...")
 
 			sql1 = """
 			ALTER TABLE pghydro.pghft_drainage_area DROP CONSTRAINT IF EXISTS dra_pk_pkey;
@@ -1838,15 +1577,11 @@ class PghydroTools:
 			self.Check_DrainageAreaMoreOneDrainageLine()
 			self.Check_DrainageLineMoreOneDrainageArea()
 			self.Check_DrainageAreaNoDrainageLine()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Consistencia Topologica Verificada Com Sucesso\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Topological Consistency Successfully Checked!\n')
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 ###Principal Procedures			
 			
@@ -1858,306 +1593,243 @@ class PghydroTools:
 		distance_to_sea = self.dlg.lineEdit_distance_to_sea.text()
 		pfafstetter_basin_code = self.dlg.lineEdit_pfafstetter_basin_code.text()
 		
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Desligando Indices...\n')
-		self.dlg.console.repaint()
+		self.print_console_message('Turning Off Indexes. Please, wait...\n')
 
 		sql = """
 		SELECT pghydro.pghfn_TurnOffKeysIndex();
 		"""
 
 		self.execute_sql(sql)
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Indices desligados com Sucesso!\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Indexes Successfully Turned Off!\n')
 		
 		if self.dlg.checkBox_CalculateDrainageLineLength.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Comprimento do Trecho...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Drainage Line Length. Please, wait...\n')
 
 			sql = """			
 			SELECT pghydro.pghfn_CalculateDrainageLineLength("""+srid_drainage_line_length+""", """+factor_drainage_line_length+""");			
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Comprimento do Trecho Calculado com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Line Length Successfully Updated!\n')
 
 		if self.dlg.checkBox_CalculateDrainageAreaArea.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Area da Bacia...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Drainage Area Area. Please, wait...\n')
 
 			sql = """			
 			SELECT pghydro.pghfn_CalculateDrainageAreaArea("""+srid_drainage_area_area+""", """+factor_drainage_area_area+""");
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Area da Bacia Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Area Area Successfully Updated!\n')
 			
 		if self.dlg.checkBox_CalculateDistanceToSea.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Distancia a Foz da Bacia...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Sea Distance. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_CalculateDistanceToSea("""+distance_to_sea+""");
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Distancia a Foz da Bacia Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Sea Distance Successfully Updated!\n')
 
 		if self.dlg.checkBox_CalculateUpstreamArea.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Area a Montante...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Upstream Area. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_CalculateUpstreamArea();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Area a Montante Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Upstream Area Successfully Updated!\n')
 
 		if self.dlg.checkBox_CalculateUpstreamDrainageLine.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Drenagem a Montante...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Upstream Drainage Line. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_CalculateUpstreamDrainageLine();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Drenagem a Montante Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Upstream Drainage Line Successfully Updated!\n')
 			
 		if self.dlg.checkBox_CalculateDownstreamDrainageLine.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Drenagem a Jusante...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Downstream Drainage Line...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_CalculateDownstreamDrainageLine();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Drenagem a Jusante Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Downstream Drainage Line Successfully Updated!\n')
 
 		if self.dlg.checkBox_Calculate_Pfafstetter_Codification.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Codificacao de Bacias de Pfafstetter...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Calculating Pfafstetter Basin Coding. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_Calculate_Pfafstetter_Codification();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Codificacao de Bacias de Pfafstetter Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Pfafstetter Basin Coding Successfully Calculated!\n')
 
 		if self.dlg.checkBox_UpdatePfafstetterBasinCode.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Codificacao de Bacias de Pfafstetter...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Pfafstetter Basin Coding. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdatePfafstetterBasinCode('"""+pfafstetter_basin_code+"""');
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizacao da Codificacao de Bacias de Pfafstetter Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Pfafstetter Basin Coding Successfully Updated!\n')
 
 		if self.dlg.checkBox_UpdatePfafstetterWatercourseCode.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Codificacao de Curso Dagua de Pfafstetter...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Pfafstetter Water Course Coding. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdatePfafstetterWatercourseCode();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Codificacao de Curso Dagua de Pfafstetter Atualizado com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Pfafstetter Water Course Coding Successfully Updated!\n')
 
 		if self.dlg.checkBox_UpdateWatercourse.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Curso Dagua...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Water Course. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdateWatercourse();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Curso Dagua Atualizado com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Water Course Successfully Updated!\n')
 
 		if self.dlg.checkBox_InsertColumnPfafstetterBasinCodeLevel.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Colunas Com Codificacao de Pfafstetter...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Adding Pfafstetter Basin Coding Columns. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_InsertColumnPfafstetterBasinCodeLevel();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Colunas com Codificacao de Pfafstetter Atualizadas com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Pfafstetter Basin Coding Columns Successfully Updated!\n')
 
 		if self.dlg.checkBox_UpdateWatercourse_Point.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Ponto de Inicio do Curso Dagua...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Water Course Starting Point. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdateWatercourse_Starting_Point();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Ponto de Inicio do Curso Dagua Atualizado com Sucesso!\n')
-			self.dlg.console.repaint()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Ponto de Fim de Curso Dagua...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Water Course Starting Point Successfully Updated!\n')
+			
+			self.print_console_message('Updating Water Course Ending Point. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdateWatercourse_Ending_Point();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Ponto de Fim de Curso Dagua Atualizado com Sucesso!\n')
-			self.dlg.console.repaint()
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Foz Maritima...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Water Course Ending Point Successfully Updated!\n')
+			
+			self.print_console_message('Updating Outlet Sea. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdateStream_Mouth();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Foz Maritima Atualizada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Outlet Sea Successfully Updated!\n')
 
 		if self.dlg.checkBox_calculatestrahlernumber.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Calculando Ordem de Strahler...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Strahler Order. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_calculatestrahlernumber();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Ordem de Strahler Calculada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Strahler Order Successfully Updated!\n')
 
 		if self.dlg.checkBox_updateshoreline.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Linha de Costa...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Shoreline. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_updateshoreline();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Linha de Costa Atualizada com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Shoreline Successfully Updated!\n')
 			
 		if self.dlg.checkBox_UpdateDomainColumn.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Atualizando Dominio de Curso Dagua...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Updating Water Course Domain. Please, wait...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_UpdateDomainColumn();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Dominio de Curso Dagua Atualizado com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Water Course Domain Successfully Updated!\n')
 
 		if self.dlg.checkBox_TurnOnKeysIndex.isChecked():
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Ligando Indices...\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Turning On Indexes...\n')
 
 			sql = """
 			SELECT pghydro.pghfn_TurnOnKeysIndex();
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Indices Ligados com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Indexes Successfully Turned On!\n')
 
 		if self.dlg.checkBox_UpdateWatershed.isChecked():
 
 			if self.dlg.checkBox_TurnOnKeysIndex.isChecked():
 				x=1
 			else:
-				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-				self.dlg.console.append('Ligando Indices...\n')
-				self.dlg.console.repaint()
+				
+				self.print_console_message('Turning On Indexes. Please, wait...\n')
 
 				sql = """
 				SELECT pghydro.pghfn_TurnOnKeysIndex();
 				"""
 
 				self.execute_sql(sql)
-
-				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-				self.dlg.console.append('Indices Ligados com Sucesso!\n')
-				self.dlg.console.repaint()
+				
+				self.print_console_message('Indexes Successfully Turned On!\n')
 
 			sql_min = """
 			SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN(1);
@@ -2172,9 +1844,8 @@ class PghydroTools:
 			result_max = self.return_sql(sql_max)
 
 			try:
-				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-				self.dlg.console.append("Atualizando Nivel "+result_max+" de Bacia...")
-				self.dlg.console.repaint()
+				
+				self.print_console_message("Updating Pfafstetter Basin Coding Level "+result_max+". Please, wait...")
 
 				sql = """
 				TRUNCATE TABLE pghydro.pghft_watershed;
@@ -2183,15 +1854,11 @@ class PghydroTools:
 				"""
 
 				self.execute_sql(sql)
-
-				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-				self.dlg.console.append("Nivel "+result_max+" de bacia Atualizado com Sucesso!")
-				self.dlg.console.repaint()
+				
+				self.print_console_message("Pfafstetter Basin Coding Level "+result_max+" Successfully Updated!")
 
 			except:
-				self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-				self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-				self.dlg.console.repaint()
+				self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 			result_min = int(result_min)
 			result_max = int(result_max)
@@ -2199,78 +1866,61 @@ class PghydroTools:
 
 			while (count > result_min):
 				try:
-					self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-					self.dlg.console.append("Atualizando Nivel "+str(count-1)+" de Bacia...")
-					self.dlg.console.repaint()
+					
+					self.print_console_message("Updating Pfafstetter Basin Coding Level "+str(count-1)+". Please, wait...")
 
 					sql = """
 					SELECT pghydro.pghfn_updatewatershed("""+str(count)+""");
 					"""
 
 					self.execute_sql(sql)
-
-					self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-					self.dlg.console.append("Nivel "+str(count-1)+" de Bacia Atualizado com Sucesso!")
-					self.dlg.console.repaint()
+					
+					self.print_console_message("Pfafstetter Basin Coding Level "+str(count-1)+" Successfully Updated!")
+					
 				except:
-					self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-					self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-					self.dlg.console.repaint()
+					
+					self.print_console_message('ERROR\nCheck Database Input Parameters!')
 					
 				count = count -1
 
 ###Export Data				
 				
     def UpdateExportTables(self):
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Atualizando Dados de Saída...\n')
-		self.dlg.console.repaint()
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Desligando Indices...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Updating Output Geometry Tables. Please, wait...\n')
+		
+		self.print_console_message('Turning Off Indexes. Please, wait...\n')
 
 		sql = """
 		SELECT pghydro.pghfn_TurnOffKeysIndex();
 		"""
 
 		self.execute_sql(sql)
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Indices desligados com Sucesso!\n')
-		self.dlg.console.repaint()
 		
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Ligando Indices...\n')
-		self.dlg.console.repaint()
+		self.print_console_message('Indexes Successfully Turned Off!\n')
+		
+		self.print_console_message('Turning On Indexes. Please, wait...\n')
 
 		sql = """
 		SELECT pghydro.pghfn_TurnOnKeysIndex();
 		"""
 
 		self.execute_sql(sql)
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Indices Ligados com Sucesso!\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Indexes Successfully Turned Off!\n')
 
 		sql = """
 		SELECT pgh_output.pghfn_UpdateExportTables();
 		"""
 
 		self.execute_sql(sql)
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Dados de Saida Atualizados com Sucesso!\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Output Geometry Tables Successfully Updated!\n')
 
     def Start_Systematize_Hydronym(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Preparando Dados para Sistematizacao dos Hidronimos...")
-			self.dlg.console.repaint()
+			self.print_console_message("Starting Hydronima Systematization. Please, wait...")
 
 			sql1 = """
 			SELECT pghydro.pghfn_TurnOffKeysIndex();
@@ -2362,22 +2012,16 @@ class PghydroTools:
 			self.execute_sql(sql7)
 			self.execute_sql(sql8)
 			self.execute_sql(sql9)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Dados Preparados para Sistematizacao com Sucesso!")
-			self.dlg.console.repaint()
+			
+			self.print_console_message("Hydronymia Systematization Successfully Started!")
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 		
     def Systematize_Hydronym(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Sistematizando Hidronimos...")
-			self.dlg.console.repaint()
+			self.print_console_message("Systematizing Names. Please, wait...")
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_wtc_pk_idx;
@@ -2429,21 +2073,16 @@ class PghydroTools:
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
 			self.execute_sql(sql4)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Hidronimos Sistematizados com Sucesso!")
-			self.dlg.console.repaint()
+			
+			self.print_console_message("Names Successfully Systematized!")
+			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Update_OriginalHydronym(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Atualizando Hidronimos Originais...")
-			self.dlg.console.repaint()
+			self.print_console_message("Updating Original Names. Please, wait...")
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
@@ -2467,21 +2106,16 @@ class PghydroTools:
 
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Hidronimos Originais Atualizados com Sucesso!\nRode Novamente a Sistematizacao de Nomes")
-			self.dlg.console.repaint()
+			
+			self.print_console_message("Original Names Successfully Updated!\nRun Again Systematize Names")
+			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_ConfluenceHydronym(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Hidronimos Confluentes...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Confluent Hydronymias. Please, wait...")
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_nm_idx;
@@ -2497,10 +2131,8 @@ class PghydroTools:
 
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Hidronimos Confluentes Atualizados Com Sucesso!')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Confluent Hydronymias Successfully Updated!')
 			
 			sql = """
 			SELECT count(id)
@@ -2508,27 +2140,22 @@ class PghydroTools:
 			"""
 
 			result = self.return_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Hidronimos Confluentes: ")
+			
+			self.dlg.console.append("Confluent Hydronymias: ")
 			self.dlg.console.append(result)
-			self.dlg.console.append("Depois da Edicao Vetorial, Rode Novamente a Sistematizacao de Nomes")
+			self.dlg.console.append("After Vectorial Editing, Run Again Systematize Names")
 			self.dlg.console.repaint()
 
 			self.dlg.lineEdit_ConfluenceHydronym.setText(result)	
 			self.dlg.lineEdit_ConfluenceHydronym.repaint()
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Stop_Systematize_Hydronym(self):
 
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Processando Sistematizacao de Hidronimos...")
-			self.dlg.console.repaint()
+			self.print_console_message("Stoping Hydronymia Systematization. Please, wait...")
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.dra_cd_pfafstetterbasin_idx;
@@ -2552,23 +2179,18 @@ class PghydroTools:
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Processo de Sistematizacao de Hidronimos Realizado com Sucesso!")
-			self.dlg.console.repaint()
+			
+			self.print_console_message("Hydronima Systematization Successfully Done!")
+			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Create_Role(self):
 
 		role = self.dlg.lineEdit_role.text()
 		role_password = self.dlg.lineEdit_role_password.text()
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Criando Usuario...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Creating User. Please, wait...\n')
 		
 		try:
 			sql = """
@@ -2576,16 +2198,13 @@ class PghydroTools:
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Usuario Criado Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('User Successfully Created!\n')
+			
 			self.Check_Role()
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Check_Role(self):
 		host = self.dlg.lineEdit_host.text()
@@ -2595,10 +2214,9 @@ class PghydroTools:
 		user = self.dlg.lineEdit_user.text()
 		password = self.dlg.lineEdit_password.text()
 		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
 		try:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Verificando Usuarios...")
-			self.dlg.console.repaint()
+			self.print_console_message("Checking Users. Please, wait...")
 
 			conn = None
 			conn = psycopg2.connect(connection_str)
@@ -2610,9 +2228,8 @@ class PghydroTools:
 			"""
 
 			cur.execute(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append("Usuarios: ")
+			
+			self.print_console_message("Users: ")
 
 			self.dlg.listWidget_role.clear()			
 			
@@ -2631,18 +2248,14 @@ class PghydroTools:
 			conn.close()
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Enable_Role(self):
 	
 		dbname = self.dlg.lineEdit_base.text()
 		role = self.dlg.listWidget_role.selectedItems()[0].text()
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Habilitando Usuario...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Granting Users. Please, wait...\n')
 		
 		try:
 			sql = """
@@ -2651,24 +2264,21 @@ class PghydroTools:
 
 			self.execute_sql(sql)
 
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Usuario Habilitado Com Sucesso:')
+			
+			self.dlg.console.append('User Successfully Granted:')
 			self.dlg.console.append(role)
 			self.dlg.console.repaint()
 
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Disable_Role(self):
 
 		dbname = self.dlg.lineEdit_base.text()
 		role = self.dlg.listWidget_role.selectedItems()[0].text()
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Desabilitando Usuario...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Revoking User. Please, wait...\n')
+		
 		
 		try:
 			sql = """
@@ -2677,22 +2287,20 @@ class PghydroTools:
 
 			self.execute_sql(sql)
 
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Usuario Desabilitado Com Sucesso:')
+			
+			self.dlg.console.append('User Successfully Revoked:')
 			self.dlg.console.append(role)
 			self.dlg.console.repaint()
+
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Drop_Role(self):
 
 		role = self.dlg.listWidget_role.selectedItems()[0].text()
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Excluindo Usuario...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Dropping User. Please, wait...\n')
 		
 		try:
 			sql = """
@@ -2700,43 +2308,34 @@ class PghydroTools:
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Usuario Excluido Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('User Successfully Dropped!\n')
+			
 			self.Check_Role()
+
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Turn_ON_Audit(self):
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Ligando Auditoria...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Turning On Log. Please, wait...\n')
 		
 		try:
-
 			sql = """
 			SELECT pgh_consistency.pghfn_turnonbackup();
 			"""
 
 			self.execute_sql(sql)
 
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Auditoria Ligada Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Log Successfully Turned On!\n')
+			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
     def Turn_OFF_Audit(self):
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Desligando Auditoria...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Turning Off Log. Please, wait...\n')
 		
 		try:
 			sql = """
@@ -2745,20 +2344,14 @@ class PghydroTools:
 
 			self.execute_sql(sql)
 
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Auditoria Desligada Com Sucesso!\n')
-			self.dlg.console.repaint()
+			self.print_console_message('Log Successfully Turned Off!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Reset_Drainage_Line_Audit(self):
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Limpando Auditoria de Drenagem...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Truncating Drainage Line Log. Please, wait...\n')
 		
 		try:
 			sql = """
@@ -2766,21 +2359,15 @@ class PghydroTools:
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Auditoria de Drenagem Limpa Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Line Log Successfully Truncated!\n')
 			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def Reset_Drainage_Area_Audit(self):
-
-		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-		self.dlg.console.append('Limpando Auditoria de Bacia...\n')
-		self.dlg.console.repaint()
+		
+		self.print_console_message('Truncating Drainage Area Log. Please, wait...\n')
 		
 		try:
 			sql = """
@@ -2788,14 +2375,11 @@ class PghydroTools:
 			"""
 
 			self.execute_sql(sql)
-
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Auditoria de Bacia Limpa Com Sucesso!\n')
-			self.dlg.console.repaint()
+			
+			self.print_console_message('Drainage Area Log Successfully Truncated!\n')
+			
 		except:
-			self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
-			self.dlg.console.append('Procedimento Nao Realizado\nVerifique os Parametros de Entrada!')
-			self.dlg.console.repaint()
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def input_drainage_line_table_attribute_name_select(self):
 		layers = self.iface.legendInterface().layers()
