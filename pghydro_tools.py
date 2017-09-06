@@ -528,7 +528,7 @@ class PghydroTools:
 
 			result = self.return_sql(sql)
 			
-			self.dlg.console.append("Invalid Geometrie: ")
+			self.dlg.console.append("Invalid Geometries: ")
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
