@@ -774,7 +774,7 @@
       <property name="title">
        <string>Geometry TOUCH Geometry</string>
       </property>
-      <widget class="QLineEdit" name="lineEdit_Check_DrainageTouchDrainageLine">
+      <widget class="QLineEdit" name="lineEdit_Check_DrainageLineTouchDrainageLine">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1133,7 +1133,7 @@
       <property name="title">
        <string>Geometry OVERLAP Geometry</string>
       </property>
-      <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaHaveSelfIntersection">
+      <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaOverlapDrainageArea">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1172,7 +1172,7 @@
       <property name="title">
        <string>Geometry WITHIN Geometry</string>
       </property>
-      <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaHaveDuplication">
+      <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaWithinDrainageArea">
        <property name="geometry">
         <rect>
          <x>10</x>

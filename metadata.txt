@@ -29,6 +29,10 @@ repository=www.github.com/pghydro/pghydrotools
 	2.0.2 - Execute and Return Queries update.
 	2.1 - Translate to English
 		- Creation of Print_Message_Console Function
+		- Rename function pgh_consistency.pghft_drainageareahaveselfintersection and associated objects to pgh_consistency.pghft_drainageareaoverlapdrainagearea
+		- Rename function def Check_DrainageTouchDrainageLine to def Check_DrainageLineTouchDrainageLine
+		- Insertion of function self.Turn_OFF_Audit() before the each main procedure
+		- Disable_role bug fixed 
 			...
 	
 # Tags are comma separated with spaces allowed

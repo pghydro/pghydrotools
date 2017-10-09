@@ -568,7 +568,7 @@ class PghydroTools:
 		DrainageLineOffset = self.dlg.lineEdit_DrainageLineOffset.text()
 
 		try:
-			self.print_console_message('Checking Topological Consistency. Please, wait...\n')
+			self.print_console_message('Checking Geometric Consistency. Please, wait...\n')
 
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drn_gm_idx;
@@ -599,6 +599,7 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyGeometryTables();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -608,7 +609,7 @@ class PghydroTools:
 			self.Check_DrainageLineIsNotValid()
 			self.Check_DrainageLineIsNotSingle()
 			
-			self.print_console_message('Topological Consistency Successfully Checked!\n')
+			self.print_console_message('Geometric Consistency Successfully Checked!\n')
 			
 		except:
 			self.print_console_message('ERROR\nCheck Database Input Parameters!')
@@ -713,6 +714,7 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyTopologyTables_1();
 			"""
 			
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql)
 
 			self.Check_DrainageLineWithinDrainageLine()
@@ -753,7 +755,7 @@ class PghydroTools:
 			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
 
-    def Check_DrainageTouchDrainageLine(self):
+    def Check_DrainageLineTouchDrainageLine(self):
 
 		try:
 			self.print_console_message("Checking Geometry TOUCH Geometry. Please, wait...")
@@ -769,8 +771,8 @@ class PghydroTools:
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
-			self.dlg.lineEdit_Check_DrainageTouchDrainageLine.setText(result)	
-			self.dlg.lineEdit_Check_DrainageTouchDrainageLine.repaint()
+			self.dlg.lineEdit_Check_DrainageLineTouchDrainageLine.setText(result)	
+			self.dlg.lineEdit_Check_DrainageLineTouchDrainageLine.repaint()
 			if int('0' if result =='' else result) > 0:
 				self.dlg.pushButton_BreakDrainageLines.setEnabled(True)
 
@@ -787,10 +789,11 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyTopologyTables_2();
 			"""
 			
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql)
 
 			self.Check_DrainageLineCrossDrainageLine()
-			self.Check_DrainageTouchDrainageLine()
+			self.Check_DrainageLineTouchDrainageLine()
 			
 			self.print_console_message('Topological Consistency Part II Successfully Checked!\n')
 			
@@ -824,8 +827,8 @@ class PghydroTools:
 
 			self.dlg.lineEdit_Check_DrainageLineCrossDrainageLine.setText('')	
 			self.dlg.lineEdit_Check_DrainageLineCrossDrainageLine.repaint()
-			self.dlg.lineEdit_Check_DrainageTouchDrainageLine.setText('')
-			self.dlg.lineEdit_Check_DrainageTouchDrainageLine.repaint()			
+			self.dlg.lineEdit_Check_DrainageLineTouchDrainageLine.setText('')
+			self.dlg.lineEdit_Check_DrainageLineTouchDrainageLine.repaint()			
 			self.dlg.pushButton_BreakDrainageLines.setEnabled(False)			
 			
 		except:
@@ -940,6 +943,7 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_updatedrainagelinenetworkconsistencytables();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -1071,6 +1075,7 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_updatedrainagelineconnectionconsistencytables();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -1275,6 +1280,7 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_updatedrainageareaconsistencygeometrytables();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -1292,14 +1298,14 @@ class PghydroTools:
 		except:
 			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 			
-    def Check_DrainageAreaHaveSelfIntersection(self):
+    def Check_DrainageAreaOverlapDrainageArea(self):
 
 		try:
 			self.print_console_message('Checking Geometry OVERLAP Geometry. Please, wait...')
 
 			sql = """
 			SELECT count(id)
-			FROM pgh_consistency.pghft_drainageareahaveselfintersection;
+			FROM pgh_consistency.pghft_drainageareaoverlapdrainagearea;
 			"""
 
 			result = self.return_sql(sql)
@@ -1308,8 +1314,8 @@ class PghydroTools:
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
-			self.dlg.lineEdit_Check_DrainageAreaHaveSelfIntersection.setText(result)	
-			self.dlg.lineEdit_Check_DrainageAreaHaveSelfIntersection.repaint()
+			self.dlg.lineEdit_Check_DrainageAreaOverlapDrainageArea.setText(result)	
+			self.dlg.lineEdit_Check_DrainageAreaOverlapDrainageArea.repaint()
 			
 			if int('0' if result =='' else result) > 0:
 				self.dlg.pushButton_RemoveDrainageAreaOverlap.setEnabled(True)
@@ -1332,8 +1338,8 @@ class PghydroTools:
 			
 			self.print_console_message('Overlap Geometries Successfully Updated!\n')
 
-			self.dlg.lineEdit_Check_DrainageAreaHaveSelfIntersection.setText('')	
-			self.dlg.lineEdit_Check_DrainageAreaHaveSelfIntersection.repaint()
+			self.dlg.lineEdit_Check_DrainageAreaOverlapDrainageArea.setText('')	
+			self.dlg.lineEdit_Check_DrainageAreaOverlapDrainageArea.repaint()
 			self.dlg.pushButton_RemoveDrainageAreaOverlap.setEnabled(False)			
 			
 		except:
@@ -1355,8 +1361,8 @@ class PghydroTools:
 			self.dlg.console.append(result)
 			self.dlg.console.repaint()
 
-			self.dlg.lineEdit_Check_DrainageAreaHaveDuplication.setText(result)	
-			self.dlg.lineEdit_Check_DrainageAreaHaveDuplication.repaint()
+			self.dlg.lineEdit_Check_DrainageAreaWithinDrainageArea.setText(result)	
+			self.dlg.lineEdit_Check_DrainageAreaWithinDrainageArea.repaint()
 			
 			if int('0' if result =='' else result) > 0:
 				self.dlg.pushButton_DeleteDrainageAreaWithinDrainageArea.setEnabled(True)
@@ -1379,8 +1385,8 @@ class PghydroTools:
 			
 			self.print_console_message('Geometry WITHIN Geometry Successfully Deleted!\n')
 			
-			self.dlg.lineEdit_Check_DrainageAreaHaveDuplication.setText('')	
-			self.dlg.lineEdit_Check_DrainageAreaHaveDuplication.repaint()
+			self.dlg.lineEdit_Check_DrainageAreaWithinDrainageArea.setText('')	
+			self.dlg.lineEdit_Check_DrainageAreaWithinDrainageArea.repaint()
 			self.dlg.pushButton_DeleteDrainageAreaWithinDrainageArea.setEnabled(False)			
 
 		except:
@@ -1395,10 +1401,11 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_updatedrainageareaconsistencytopologytables();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql)
 
 			self.Check_DrainageAreaWithinDrainageArea()
-			self.Check_DrainageAreaHaveSelfIntersection()
+			self.Check_DrainageAreaOverlapDrainageArea()
 			
 			self.print_console_message('Topological Geometry Successfully Checked!\n')
 			
@@ -1566,6 +1573,7 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_updatedrainagelinedrainageareaconsistencytables();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -1594,6 +1602,7 @@ class PghydroTools:
 		pfafstetter_basin_code = self.dlg.lineEdit_pfafstetter_basin_code.text()
 		
 		self.print_console_message('Turning Off Indexes. Please, wait...\n')
+		self.Turn_OFF_Audit()
 
 		sql = """
 		SELECT pghydro.pghfn_TurnOffKeysIndex();
@@ -1895,6 +1904,8 @@ class PghydroTools:
 		SELECT pghydro.pghfn_TurnOffKeysIndex();
 		"""
 
+		self.Turn_OFF_Audit()
+
 		self.execute_sql(sql)
 		
 		self.print_console_message('Indexes Successfully Turned Off!\n')
@@ -2003,6 +2014,7 @@ class PghydroTools:
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -2069,6 +2081,7 @@ class PghydroTools:
 			ALTER TABLE pghydro.pghft_drainage_line ADD CONSTRAINT drn_pk_pkey PRIMARY KEY (drn_pk);
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -2104,6 +2117,7 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_update_drn_nm();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			
@@ -2129,6 +2143,7 @@ class PghydroTools:
 			DROP INDEX IF EXISTS pghydro.drn_nm_idx;
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			
@@ -2176,6 +2191,7 @@ class PghydroTools:
 			SELECT pghydro.pghfn_turnonkeysindex();
 			"""
 
+			self.Turn_OFF_Audit()
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -2306,6 +2322,8 @@ class PghydroTools:
 			sql = """
 			DROP USER IF EXISTS """+role+""";
 			"""
+
+			self.Disable_Role()
 
 			self.execute_sql(sql)
 			
