@@ -2350,7 +2350,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Truncate Drainage Line Log</string>
+        <string>Reset Drainage Line Log</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_reset_drainage_area_audit">
@@ -2363,7 +2363,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Truncate Draniage Area Log</string>
+        <string>Reset Drainage Area Log</string>
        </property>
       </widget>
      </widget>
@@ -2530,7 +2530,7 @@
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>210</y>
+       <y>180</y>
        <width>221</width>
        <height>31</height>
       </rect>
@@ -2572,7 +2572,7 @@
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>240</y>
+       <y>210</y>
        <width>231</width>
        <height>31</height>
       </rect>
@@ -2592,7 +2592,7 @@
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>60</y>
+       <y>30</y>
        <width>151</width>
        <height>141</height>
       </rect>
@@ -2605,6 +2605,30 @@
      </property>
      <property name="scaledContents">
       <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_14">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>240</y>
+       <width>261</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string> REQUIREMENTS:
+ -Postgresql version 9.1+
+ -PostGIS version 2.0+
+ -PgHydro version 6.0.1:
+ https://github.com/pghydro/pghydro/tree/master</string>
      </property>
     </widget>
    </widget>
