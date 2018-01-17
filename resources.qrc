@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/plugins/PghydroTools">
     <file>icon.png</file>
+    <file>Logo_pghydro_hexa.png</file>
     <file>Logo_quadrada.png</file>
   </qresource>
 </RCC>
