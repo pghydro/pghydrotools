@@ -10,7 +10,7 @@
 name=Pghydro Tools
 qgisMinimumVersion=2.0
 description=PgHydro Tools Interface for PgHydro Extension for PostgreSQL/PostGIS
-version=2.1
+version=2.2
 author=PgHydro Team
 email=pghydro.project@gmail.com
 
@@ -33,7 +33,9 @@ repository=www.github.com/pghydro/pghydrotools
 		- Rename function def Check_DrainageTouchDrainageLine to def Check_DrainageLineTouchDrainageLine
 		- Insertion of function self.Turn_OFF_Audit() before the each main procedure
 		- Disable_role bug fixed 
-			...
+		- Insert of new version logo
+		- Resource_rc bug fixed including and not more deleting codes.
+		- ...
 	
 # Tags are comma separated with spaces allowed
 tags=spatial database system, otto pfafstetter, drainage, hydrology, hydrography, hydro
@@ -42,7 +44,7 @@ homepage=www.pghydro.org
 category=Database
 icon=icon.png
 # experimental flag
-experimental=True
+experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
