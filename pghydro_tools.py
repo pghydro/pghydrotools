@@ -605,9 +605,9 @@ class PghydroTools:
 			self.execute_sql(sql3)
 			self.execute_sql(sql4)
 
+			self.Check_DrainageLineIsNotSingle()
 			self.Check_DrainageLineIsNotSimple()
 			self.Check_DrainageLineIsNotValid()
-			self.Check_DrainageLineIsNotSingle()
 			
 			self.print_console_message('Geometric Consistency Successfully Checked!\n')
 			
@@ -1289,9 +1289,9 @@ class PghydroTools:
 			self.execute_sql(sql6)
 			self.execute_sql(sql7)
 
+			self.Check_DrainageAreaIsNotSingle()
 			self.Check_DrainageAreaIsNotSimple()
 			self.Check_DrainageAreaIsNotValid()
-			self.Check_DrainageAreaIsNotSingle()
 			
 			self.print_console_message('Geometric Consistency Successfully Checked!\n')
 
@@ -1581,10 +1581,10 @@ class PghydroTools:
 			self.execute_sql(sql5)
 			self.execute_sql(sql6)
 			
-			self.Check_DrainageLineNoDrainageArea()
 			self.Check_DrainageAreaMoreOneDrainageLine()
-			self.Check_DrainageLineMoreOneDrainageArea()
+			self.Check_DrainageLineNoDrainageArea()
 			self.Check_DrainageAreaNoDrainageLine()
+			self.Check_DrainageLineMoreOneDrainageArea()
 			
 			self.print_console_message('Topological Consistency Successfully Checked!\n')
 
@@ -1600,6 +1600,7 @@ class PghydroTools:
 		factor_drainage_area_area = self.dlg.lineEdit_factor_drainage_area_area.text()
 		distance_to_sea = self.dlg.lineEdit_distance_to_sea.text()
 		pfafstetter_basin_code = self.dlg.lineEdit_pfafstetter_basin_code.text()
+		pfafstetter_basin_code_level = len(pfafstetter_basin_code)
 		
 		self.print_console_message('Turning Off Indexes. Please, wait...\n')
 		self.Turn_OFF_Audit()
@@ -1832,11 +1833,11 @@ class PghydroTools:
 				
 				self.print_console_message('Turning On Indexes. Please, wait...\n')
 
-				sql = """
+				sql1 = """
 				SELECT pghydro.pghfn_TurnOnKeysIndex();
 				"""
 
-				self.execute_sql(sql)
+				self.execute_sql(sql1)
 				
 				self.print_console_message('Indexes Successfully Turned On!\n')
 
@@ -1848,7 +1849,7 @@ class PghydroTools:
 			SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN((SELECT pghydro.pghfn_numPfafstetterBasinCodeLevel()::integer));
 			"""
 
-			result_min = self.return_sql(sql_min)
+			result_min = pfafstetter_basin_code_level
 
 			result_max = self.return_sql(sql_max)
 
@@ -1856,13 +1857,17 @@ class PghydroTools:
 				
 				self.print_console_message("Updating Pfafstetter Basin Coding Level "+result_max+". Please, wait...")
 
-				sql = """
+				sql2 = """
 				TRUNCATE TABLE pghydro.pghft_watershed;
+				"""
 				
-				SELECT pghydro.pghfn_updatewatersheddrainagearea((SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN((SELECT pghydro.pghfn_numPfafstetterBasinCodeLevel()::integer))));
+				sql3 = """
+				SELECT pghydro.pghfn_updatewatersheddrainagearea("""+str(result_max)+""");
 				"""
 
-				self.execute_sql(sql)
+				self.execute_sql(sql2)
+
+				self.execute_sql(sql3)
 				
 				self.print_console_message("Pfafstetter Basin Coding Level "+result_max+" Successfully Updated!")
 
@@ -1878,11 +1883,11 @@ class PghydroTools:
 					
 					self.print_console_message("Updating Pfafstetter Basin Coding Level "+str(count-1)+". Please, wait...")
 
-					sql = """
+					sql4 = """
 					SELECT pghydro.pghfn_updatewatershed("""+str(count)+""");
 					"""
 
-					self.execute_sql(sql)
+					self.execute_sql(sql4)
 					
 					self.print_console_message("Pfafstetter Basin Coding Level "+str(count-1)+" Successfully Updated!")
 					
@@ -1891,6 +1896,8 @@ class PghydroTools:
 					self.print_console_message('ERROR\nCheck Database Input Parameters!')
 					
 				count = count -1
+
+			self.print_console_message("All Pfafstetter Basin Coding Level Successfully Updated!")
 
 ###Export Data				
 				

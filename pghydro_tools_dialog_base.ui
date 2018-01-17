@@ -398,9 +398,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>150</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -432,14 +432,32 @@
         <string>Simplify</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_41">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelineisnotsimple</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_9">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>220</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -469,6 +487,24 @@
        </property>
        <property name="text">
         <string>Validate</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_42">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelineisnotvalid</string>
        </property>
       </widget>
      </widget>
@@ -515,7 +551,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>240</y>
+        <y>300</y>
         <width>81</width>
         <height>20</height>
        </rect>
@@ -528,7 +564,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>240</y>
+        <y>300</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -541,9 +577,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>180</y>
+        <y>80</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -575,6 +611,24 @@
         <string>Explode</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_43">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelineisnotsingle</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_36">
@@ -582,8 +636,8 @@
       <rect>
        <x>220</x>
        <y>10</y>
-       <width>211</width>
-       <height>211</height>
+       <width>221</width>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
@@ -607,8 +661,8 @@
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>191</width>
-        <height>51</height>
+        <width>201</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -640,14 +694,32 @@
         <string>Delete</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_44">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>181</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelinewithindrainageline</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_41">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
-        <width>191</width>
-        <height>51</height>
+        <y>120</y>
+        <width>201</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -676,14 +748,32 @@
         <string>Manual Editing</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_45">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>191</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelineoverlapdrainageline</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_11">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>150</y>
-        <width>191</width>
-        <height>51</height>
+        <y>190</y>
+        <width>201</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -712,15 +802,33 @@
         <string>Manual Editing</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_46">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>181</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelineloops</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_39">
      <property name="geometry">
       <rect>
-       <x>440</x>
+       <x>450</x>
        <y>10</y>
        <width>201</width>
-       <height>211</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
@@ -745,7 +853,7 @@
         <x>10</x>
         <y>50</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -761,14 +869,32 @@
         </rect>
        </property>
       </widget>
+      <widget class="QLabel" name="label_47">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelinecrossdrainagelines</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_42">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
+        <y>120</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -784,6 +910,24 @@
         </rect>
        </property>
       </widget>
+      <widget class="QLabel" name="label_48">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelinetouchdrainageline</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QPushButton" name="pushButton_BreakDrainageLines">
       <property name="enabled">
@@ -792,7 +936,7 @@
       <property name="geometry">
        <rect>
         <x>60</x>
-        <y>170</y>
+        <y>190</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -813,11 +957,11 @@
        <x>10</x>
        <y>10</y>
        <width>231</width>
-       <height>201</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
-      <string>4.1 - Create Drainage Network</string>
+      <string>4.1 - Create Drainage Line Network</string>
      </property>
      <widget class="QGroupBox" name="groupBox_14">
       <property name="geometry">
@@ -825,7 +969,7 @@
         <x>10</x>
         <y>50</y>
         <width>211</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -857,14 +1001,32 @@
         <string>Spatial Union</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_49">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_pointvalencevalue2</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_15">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>120</y>
         <width>211</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -893,6 +1055,24 @@
         <string>Manual Editing</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_50">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_pointvalencevalue4</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QPushButton" name="pushButton_Execute_Network_Topology">
       <property name="geometry">
@@ -911,7 +1091,7 @@
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>170</y>
+        <y>200</y>
         <width>91</width>
         <height>20</height>
        </rect>
@@ -924,7 +1104,7 @@
       <property name="geometry">
        <rect>
         <x>130</x>
-        <y>170</y>
+        <y>200</y>
         <width>81</width>
         <height>20</height>
        </rect>
@@ -940,7 +1120,7 @@
        <x>250</x>
        <y>10</y>
        <width>191</width>
-       <height>111</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
@@ -1012,11 +1192,11 @@
        <x>450</x>
        <y>10</y>
        <width>201</width>
-       <height>161</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
-      <string>4.3 - Connectivity And Flow Direction</string>
+      <string>4.3 - Connectivity and Flow Direction</string>
      </property>
      <widget class="QGroupBox" name="groupBox_17">
       <property name="geometry">
@@ -1024,11 +1204,11 @@
         <x>10</x>
         <y>50</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
-       <string>Geometries Disconnected</string>
+       <string>Drainage Lines  Disconnected</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageLineIsDisconnected">
        <property name="geometry">
@@ -1053,18 +1233,36 @@
         <string>Manual Editing</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_51">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelineisdisconnected</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_18">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
+        <y>110</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
-       <string>Geometries With Divergent Nodes</string>
+       <string>Divergent Drainage Points</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_PointDivergent">
        <property name="geometry">
@@ -1087,6 +1285,24 @@
        </property>
        <property name="text">
         <string>Manual Editing</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_52">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_pointdivergent</string>
        </property>
       </widget>
      </widget>
@@ -1115,7 +1331,7 @@
        <x>220</x>
        <y>10</y>
        <width>201</width>
-       <height>161</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
@@ -1125,9 +1341,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
+        <y>110</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1159,6 +1375,24 @@
         <string>Remove</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_57">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainageareaoverlapdrainagearea</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_24">
       <property name="geometry">
@@ -1166,7 +1400,7 @@
         <x>10</x>
         <y>50</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1198,6 +1432,24 @@
         <string>Delete</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_56">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainageareawithindrainagearea</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QPushButton" name="pushButton_Check_DrainageAreaTopologyConsistencies">
       <property name="geometry">
@@ -1219,7 +1471,7 @@
        <x>10</x>
        <y>10</y>
        <width>201</width>
-       <height>281</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
@@ -1229,9 +1481,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>150</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1263,14 +1515,32 @@
         </rect>
        </property>
       </widget>
+      <widget class="QLabel" name="label_53">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainageareaisnotsingle</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_45">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>220</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1300,6 +1570,24 @@
          <width>81</width>
          <height>20</height>
         </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_54">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainageareaisnotvalid</string>
        </property>
       </widget>
      </widget>
@@ -1333,7 +1621,7 @@
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>240</y>
+        <y>300</y>
         <width>81</width>
         <height>20</height>
        </rect>
@@ -1346,7 +1634,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>240</y>
+        <y>300</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -1372,9 +1660,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>180</y>
+        <y>80</y>
         <width>181</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1406,6 +1694,24 @@
         </rect>
        </property>
       </widget>
+      <widget class="QLabel" name="label_55">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainageareaisnotsingle</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -1419,7 +1725,7 @@
        <x>10</x>
        <y>10</y>
        <width>221</width>
-       <height>261</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="title">
@@ -1429,9 +1735,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>120</y>
         <width>201</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1460,14 +1766,32 @@
         <string>Manual Editing</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_58">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelinenodrainagearea</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_28">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
+        <y>50</y>
         <width>201</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1496,14 +1820,32 @@
         <string>Manual Editing</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_59">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>181</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainageareamoreonedrainageline</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_29">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>150</y>
+        <y>260</y>
         <width>201</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
@@ -1532,6 +1874,24 @@
         <string>Manual Editing</string>
        </property>
       </widget>
+      <widget class="QLabel" name="label_60">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>181</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainagelinemoreonedrainagearea</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QPushButton" name="pushButton_Check_DrainageAreaDrainageLineConsistencies">
       <property name="geometry">
@@ -1550,13 +1910,13 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>200</y>
+        <y>190</y>
         <width>201</width>
-        <height>51</height>
+        <height>61</height>
        </rect>
       </property>
       <property name="title">
-       <string>Drainage Area WTHOUT Drainage Line</string>
+       <string>Drainage Area WITHOUT Drainage Line</string>
       </property>
       <widget class="QLineEdit" name="lineEdit_Check_DrainageAreaNoDrainageLine">
        <property name="geometry">
@@ -1582,6 +1942,24 @@
        </property>
        <property name="text">
         <string>Spatial Union</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_61">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>161</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>pghft_drainageareanodrainageline</string>
        </property>
       </widget>
      </widget>
@@ -1820,7 +2198,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>29100</string>
+        <string>5880</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_srid_drainage_area_area">
@@ -1833,7 +2211,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>29100</string>
+        <string>5880</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_21">
@@ -1940,7 +2318,7 @@
         </rect>
        </property>
        <property name="text">
-        <string/>
+        <string>0</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2036,7 +2414,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Upddate Watersheds</string>
+        <string>Update Watersheds</string>
        </property>
       </widget>
      </widget>
@@ -2529,8 +2907,8 @@
     <widget class="QLabel" name="label_11">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>180</y>
+       <x>230</x>
+       <y>150</y>
        <width>221</width>
        <height>31</height>
       </rect>
@@ -2546,7 +2924,7 @@
       <string>www.pghydro.org</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
      <property name="openExternalLinks">
       <bool>false</bool>
@@ -2571,8 +2949,8 @@
     <widget class="QLabel" name="label_13">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>210</y>
+       <x>230</x>
+       <y>120</y>
        <width>231</width>
        <height>31</height>
       </rect>
@@ -2585,23 +2963,23 @@
       </font>
      </property>
      <property name="text">
-      <string>PgHydro Tools Version 2.1</string>
+      <string>PgHydro Tools Version 2.2</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>30</y>
-       <width>151</width>
-       <height>141</height>
+       <x>60</x>
+       <y>100</y>
+       <width>161</width>
+       <height>181</height>
       </rect>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="resources.qrc">:/plugins/PghydroTools/Logo_quadrada.png</pixmap>
+      <pixmap resource="resources.qrc">:/plugins/PghydroTools/Logo_pghydro_hexa.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -2610,10 +2988,10 @@
     <widget class="QLabel" name="label_14">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>240</y>
-       <width>261</width>
-       <height>101</height>
+       <x>230</x>
+       <y>190</y>
+       <width>411</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="font">
@@ -2627,8 +3005,7 @@
       <string> REQUIREMENTS:
  -Postgresql version 9.1+
  -PostGIS version 2.0+
- -PgHydro version 6.0.1:
- https://github.com/pghydro/pghydro/tree/master</string>
+ -PgHydro version 6.2: https://github.com/pghydro/pghydro/tree/master</string>
      </property>
     </widget>
    </widget>
@@ -2657,5 +3034,8 @@
    </widget>
   </widget>
  </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
