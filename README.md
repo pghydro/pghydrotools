@@ -2,15 +2,17 @@
 
 QGIS PgHydroTools Plugin is an interface used in QGIS to activate all functionality of PgHydro Extension for PostgreSQL/PostGIS.
 
-To use this plugin, you have to install the PgHydro extension for PostgreSQL/PostGIS at https://github.com/pghydro/pghydro
+To use this plugin, you have to install the PgHydro 6.2 extension for PostgreSQL/PostGIS at https://github.com/pghydro/pghydro
 
 # STATUS
 
 ## Branches
 
-The master branch has the latest minor release. (2.0.1)
+The master branch has the latest minor release. (2.2)
 
-The develop branch has the next minor release. (2.0.2-dev)
+The develop branch has the next minor release. (2.3-dev)
+
+Next LTR: version 2.4 (Julho 2018)
 
 # INTRODUCTION
 
@@ -22,17 +24,17 @@ PgHydro is Open Source, available under the GPLv2 license and is supported by a 
 
 # REQUIREMENTS
 
-Postgresql version = postgresql-9.3.5-3-windows-x64
-(https://drive.google.com/file/d/0B2u6WhefYxhZMmlPazUwR2pZYWs/view?usp=sharing)
+Postgresql version 9.1+
 
-PostGIS version = postgis-bundle-pg93x64-setup-2.1.4-1
-(https://drive.google.com/file/d/0B2u6WhefYxhZdTIyVlRBWllPeXc/view?usp=sharing)
+PostGIS version 2.0+
 
-QGIS version = QGIS-OSGeo4W-2.6.1-1-Setup-x86_64
-(https://drive.google.com/file/d/0B2u6WhefYxhZWVI4XzYzdkplXzg/view?usp=sharing)
+QGIS version 2.14+
 
-To use this plugin, you have to install the PgHydro Extension (v.6.0) for PostgreSQL/PostGIS
-(https://github.com/pghydro/pghydro)
+Pghydro 6.2
+
+Pghydro Consistency 6.2
+
+Pghydro Output 6.2
 
 ## INSTALLATION
 

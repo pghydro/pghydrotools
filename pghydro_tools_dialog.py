@@ -24,10 +24,10 @@
 import os
 
 from PyQt4 import QtGui, uic
-
+import sys
+sys.path.append(os.path.dirname(__file__))
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'pghydro_tools_dialog_base.ui'))
-
+    os.path.dirname(__file__), 'pghydro_tools_dialog_base.ui'), resource_suffix='')
 
 class PghydroToolsDialog(QtGui.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
