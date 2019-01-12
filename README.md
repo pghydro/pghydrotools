@@ -40,6 +40,10 @@ Pghydro Output 6.2
 
 The plugin was developed in python and the latest stable release is available for download by QGIS or by the link https://plugins.qgis.org/plugins/PghydroTools/
 
+## Tutorial (v.2.2)
+
+Youtube: https://www.youtube.com/channel/UCgkCUQ-i72bBY41a1bhVWyw
+
 ## Notes
 
 IMPORTANT : the changes are made in the current project, and will be saved only if you save the project.
