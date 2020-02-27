@@ -136,7 +136,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>5433</string>
+       <string>5432</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_base">
@@ -191,7 +191,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Connect</string>
+       <string>Test Connection</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_schema">
@@ -2198,7 +2198,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>5880</string>
+        <string>3857</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEdit_srid_drainage_area_area">
@@ -2211,7 +2211,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>5880</string>
+        <string>3857</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_21">
@@ -2341,6 +2341,9 @@
        </property>
       </widget>
       <widget class="QCheckBox" name="checkBox_InsertColumnPfafstetterBasinCodeLevel">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -2353,7 +2356,7 @@
         <string>Add Pfafstetter Basin Coding Columns</string>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QCheckBox" name="checkBox_updateshoreline">
@@ -2376,7 +2379,7 @@
        <property name="geometry">
         <rect>
          <x>430</x>
-         <y>20</y>
+         <y>40</y>
          <width>171</width>
          <height>17</height>
         </rect>
@@ -2392,7 +2395,7 @@
        <property name="geometry">
         <rect>
          <x>430</x>
-         <y>40</y>
+         <y>60</y>
          <width>181</width>
          <height>20</height>
         </rect>
@@ -2408,13 +2411,64 @@
        <property name="geometry">
         <rect>
          <x>430</x>
-         <y>60</y>
+         <y>80</y>
          <width>171</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
-        <string>Update Watersheds</string>
+        <string>Update Watersheds &lt;=</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lineEdit_watershed_pfafstetter_max_code">
+       <property name="geometry">
+        <rect>
+         <x>570</x>
+         <y>80</y>
+         <width>21</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>6</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_TurnOffKeysIndex">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>20</y>
+         <width>171</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Turn Off Indexes, PKs and FKs</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="checkBox_Vacuum_Database">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>100</y>
+         <width>171</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Vacuum Database</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
      </widget>
@@ -2963,7 +3017,7 @@
       </font>
      </property>
      <property name="text">
-      <string>PgHydro Tools Version 2.2</string>
+      <string>PgHydro Tools Version 2.4</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
@@ -3005,7 +3059,7 @@
       <string> REQUIREMENTS:
  -Postgresql version 9.1+
  -PostGIS version 2.0+
- -PgHydro version 6.2: https://github.com/pghydro/pghydro/tree/master</string>
+ -PgHydro version 6.4: https://github.com/pghydro/pghydro/tree/master</string>
      </property>
     </widget>
    </widget>
@@ -3034,8 +3088,5 @@
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
  <connections/>
 </ui>

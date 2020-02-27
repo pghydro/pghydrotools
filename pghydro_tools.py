@@ -5,9 +5,9 @@
                                  A QGIS plugin
  This plugin create the pghydro schema and runs all the process to consist a drainage network
                               -------------------
-        begin                : 2015-10-07
+        begin                : 2020-01-31
         git sha              : $Format:%H$
-        copyright            : (C) 2015 by Alexandre de Amorim Teixeira
+        copyright            : (C) 2020 by Alexandre de Amorim Teixeira
         email                : pghydro.project@gmail.com
  ***************************************************************************/
 
@@ -227,6 +227,86 @@ class PghydroTools:
 
 ###Database Editing		
 
+    def create_database(self):
+		host = self.dlg.lineEdit_host.text()
+		port = self.dlg.lineEdit_port.text()
+		dbname = self.dlg.lineEdit_base.text()
+		user = self.dlg.lineEdit_user.text()
+		password = self.dlg.lineEdit_password.text()
+		postgres = 'postgres'
+		connection_str_postgres = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, postgres, user, password)
+		
+		self.print_console_message("Creating Spatial Database and Pghydro Extension. Please, Wait...")
+
+		try:
+			conn = psycopg2.connect(connection_str_postgres)
+			conn.autocommit = True
+			cur = conn.cursor()
+
+			createdatabase = """
+			CREATE DATABASE """+dbname+""";
+			"""
+			cur.execute(createdatabase)
+			
+			self.print_console_message("Database Created With Success!\n")
+			
+			cur.close()
+			conn.close()
+			
+			create_spatial_database = """
+			CREATE EXTENSION postgis;
+			"""
+			create_pghydro = """
+			CREATE EXTENSION pghydro;
+			"""
+			create_pgh_consistency = """
+			CREATE EXTENSION pgh_consistency;
+			"""
+			create_pgh_output = """
+			CREATE EXTENSION pgh_output;
+			"""
+			
+			self.execute_sql(create_spatial_database)
+			
+			self.print_console_message("Spatial Database Successfully Created!\n")
+			
+			self.execute_sql(create_pghydro)
+			
+			self.print_console_message("PgHydro Extension Successfully Created!\n")
+			
+			self.execute_sql(create_pgh_consistency)
+			
+			self.print_console_message("PgHydro Consistency Extension Successfully Created!\n")
+			
+			self.execute_sql(create_pgh_output)
+			
+			self.print_console_message("PgHydro Output Extension Successfully Created!\n")
+			
+			self.print_console_message("Spatial Database and Pghydro Extensions Successfully Created!\n")
+
+		except:
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
+		
+    def connect_database(self):
+		host = self.dlg.lineEdit_host.text()
+		port = self.dlg.lineEdit_port.text()
+		dbname = self.dlg.lineEdit_base.text()
+		schema = self.dlg.lineEdit_schema.text()
+		user = self.dlg.lineEdit_user.text()
+		password = self.dlg.lineEdit_password.text()
+		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
+
+		self.print_console_message('Connecting to Database. Please, wait...')
+		
+		try:
+			conn = psycopg2.connect(connection_str)
+			conn.close()
+
+			self.print_console_message('Database Successfully Connected!\n')
+			
+		except:
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
+
     def execute_sql(self, sql):
 		host = self.dlg.lineEdit_host.text()
 		port = self.dlg.lineEdit_port.text()
@@ -276,86 +356,6 @@ class PghydroTools:
 		self.dlg.console.append(time.strftime("\n%d.%m.%Y"+" - "+"%H"+":"+"%M"+":"+"%S"))
 		self.dlg.console.append(message)
 		self.dlg.console.repaint()
-			
-    def create_database(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		postgres = 'postgres'
-		connection_str_postgres = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, postgres, user, password)
-		
-		self.print_console_message("Creating Spatial Database and Pghydro Extension. Please, Wait...")
-
-		try:
-			conn = psycopg2.connect(connection_str_postgres)
-			conn.autocommit = True
-			cur = conn.cursor()
-
-			createdatabase = """
-			CREATE DATABASE """+dbname+""";
-			"""
-			cur.execute(createdatabase)
-			
-			self.print_console_message("Database Created With Success!\n")
-			
-			cur.close()
-			conn.close()
-			
-			create_spatial_database = """
-			CREATE EXTENSION postgis;
-			"""
-			create_pghydro = """
-			CREATE EXTENSION pghydro;
-			"""
-			create_pgh_consistency = """
-			CREATE EXTENSION pgh_consistency;
-			"""
-			create_pgh_output = """
-			CREATE EXTENSION pgh_output;
-			"""
-			
-			self.execute_sql(create_spatial_database)
-			
-			self.print_console_message("Spatial Database Successfully Created!\n")
-			
-			self.execute_sql(create_pghydro)
-			
-			self.print_console_message("PgHydro Extension successfully Created!\n")
-			
-			self.execute_sql(create_pgh_consistency)
-			
-			self.print_console_message("PgHydro Consistency Extension Successfully Created!\n")
-			
-			self.execute_sql(create_pgh_output)
-			
-			self.print_console_message("PgHydro Output Extension Successfully Created!\n")
-			
-			self.print_console_message("Spatial Database and Pghydro Extensions Successfully Created!\n")
-
-		except:
-			self.print_console_message('ERROR\nCheck Database Input Parameters!')
-		
-    def connect_database(self):
-		host = self.dlg.lineEdit_host.text()
-		port = self.dlg.lineEdit_port.text()
-		dbname = self.dlg.lineEdit_base.text()
-		schema = self.dlg.lineEdit_schema.text()
-		user = self.dlg.lineEdit_user.text()
-		password = self.dlg.lineEdit_password.text()
-		connection_str = 'host={0} port={1} dbname={2} user={3} password={4}'.format(host, port, dbname, user, password)
-
-		self.print_console_message('Connecting to Database. Please, wait...')
-		
-		try:
-			conn = psycopg2.connect(connection_str)
-			conn.close()
-
-			self.print_console_message('Database Successfully Connected!\n')
-			
-		except:
-			self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
 ###Input Drainage Line
 		
@@ -374,16 +374,18 @@ class PghydroTools:
 			self.print_console_message('Importing Drainage Lines. Please, wait...\n')
 
 			self.dlg.console.append('SCHEMA: '+input_drainage_line_table_schema)
-			self.dlg.console.append('TABELA GEOMETRICA: '+input_drainage_line_table)
-			self.dlg.console.append('COLUNA COM NOME: '+input_drainage_line_table_attribute_name)
-			self.dlg.console.append('COLUNA GEOMETRICA: '+input_drainage_line_table_attribute_geom)
+			self.dlg.console.append('GEOMETRY TABLE: '+input_drainage_line_table)
+			self.dlg.console.append('RIVER NAME COLUMN: '+input_drainage_line_table_attribute_name)
+			self.dlg.console.append('GEOMETRY COLUMN: '+input_drainage_line_table_attribute_geom)
 		
-			sql = """
+			sql= """
 			SELECT pghydro.pghfn_input_data_drainage_line('"""+input_drainage_line_table_schema+"""','"""+input_drainage_line_table+"""','"""+input_drainage_line_table_attribute_geom+"""','"""+input_drainage_line_table_attribute_name+"""');
 			"""
-
+			
 			self.execute_sql(sql)
 			
+			self.Vacuum_Database()
+
 			self.print_console_message('Drainage Lines Successfully Imported!\n')
 
 		except:
@@ -406,16 +408,18 @@ class PghydroTools:
 			self.print_console_message('Updating Drainage Areas. Please, wait...\n')
 
 			self.dlg.console.append('SCHEME: '+input_drainage_area_table_schema)
-			self.dlg.console.append('GEOMETRIC TABLE: '+input_drainage_area_table)
-			self.dlg.console.append('GEOMETRIC COLUMN: '+input_drainage_area_table_attribute_geom)
+			self.dlg.console.append('GEOMETRY TABLE: '+input_drainage_area_table)
+			self.dlg.console.append('GEOMETRY COLUMN: '+input_drainage_area_table_attribute_geom)
 			self.dlg.console.repaint()
 		
 			sql = """
 			SELECT pghydro.pghfn_input_data_drainage_area('"""+input_drainage_area_table_schema+"""','"""+input_drainage_area_table+"""','"""+input_drainage_area_table_attribute_geom+"""');
 			"""
+
 			self.execute_sql(sql)
-		
-			
+
+			self.Vacuum_Database()
+
 			self.print_console_message('Drainage Areas Successfully Imported!\n')
 			
 
@@ -600,14 +604,19 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
+			self.Vacuum_Database()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
 			self.execute_sql(sql4)
-
+			
 			self.Check_DrainageLineIsNotSingle()
 			self.Check_DrainageLineIsNotSimple()
 			self.Check_DrainageLineIsNotValid()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Geometric Consistency Successfully Checked!\n')
 			
@@ -715,11 +724,14 @@ class PghydroTools:
 			"""
 			
 			self.Turn_OFF_Audit()
+
 			self.execute_sql(sql)
 
 			self.Check_DrainageLineWithinDrainageLine()
 			self.Check_DrainageLineOverlapDrainageLine()
 			self.Check_DrainageLineLoops()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Topological Consistency Part I Successfully Checked!\n')
 			
@@ -788,12 +800,15 @@ class PghydroTools:
 			sql = """
 			SELECT pgh_consistency.pghfn_UpdateDrainageLineConsistencyTopologyTables_2();
 			"""
-			
+
 			self.Turn_OFF_Audit()
+
 			self.execute_sql(sql)
 
 			self.Check_DrainageLineCrossDrainageLine()
 			self.Check_DrainageLineTouchDrainageLine()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Topological Consistency Part II Successfully Checked!\n')
 			
@@ -815,13 +830,8 @@ class PghydroTools:
 			SELECT pgh_consistency.pghfn_BreakDrainageLine();
 			"""
 
-			sql3 = """
-			SELECT pgh_consistency.pghfn_ExplodeDrainageLine();
-			"""
-
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
-			self.execute_sql(sql3)
 			
 			self.print_console_message('Geometries Successfully Broken!\n')
 
@@ -910,7 +920,7 @@ class PghydroTools:
 
 		try:
 			self.print_console_message('Creating Drainage Line Network. Please, wait...\n')
-		
+			
 			sql1 = """
 			DROP INDEX IF EXISTS pghydro.drp_gm_idx;
 
@@ -944,14 +954,17 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
 			self.execute_sql(sql4)
 			self.execute_sql(sql5)
-			
+
 			self.Check_PointValenceValue2()
 			self.Check_PointValenceValue4()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Drainage Line Network Successfully Created!\n')
 			
@@ -1076,6 +1089,7 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -1084,6 +1098,8 @@ class PghydroTools:
 
 			self.Check_DrainageLineIsDisconnected()
 			self.Check_PointDivergent()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Flow Direction Successfully Calculated!\n')
 			
@@ -1235,8 +1251,6 @@ class PghydroTools:
 
     def Check_DrainageAreaGeometryConsistencies(self):
 		
-		self.print_console_message('Checking Geometric Consistency. Please, wait...\n')
-		
 		DrainageAreaPrecision = self.dlg.lineEdit_DrainageAreaPrecision.text()
 		DrainageAreaOffset = self.dlg.lineEdit_DrainageAreaOffset.text()
 
@@ -1281,6 +1295,9 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
+			self.Vacuum_Database()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -1292,6 +1309,8 @@ class PghydroTools:
 			self.Check_DrainageAreaIsNotSingle()
 			self.Check_DrainageAreaIsNotSimple()
 			self.Check_DrainageAreaIsNotValid()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Geometric Consistency Successfully Checked!\n')
 
@@ -1402,10 +1421,13 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
 			self.execute_sql(sql)
 
 			self.Check_DrainageAreaWithinDrainageArea()
 			self.Check_DrainageAreaOverlapDrainageArea()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Topological Geometry Successfully Checked!\n')
 			
@@ -1550,6 +1572,10 @@ class PghydroTools:
 			
 			CREATE INDEX drn_gm_idx ON pghydro.pghft_drainage_line USING GIST(drn_gm);
 
+			DROP INDEX IF EXISTS pghydro.drn_gm_point_idx;
+			
+			CREATE INDEX drn_gm_point_idx ON pghydro.pghft_drainage_line USING GIST(drn_gm_point);
+
 			DROP INDEX IF EXISTS pghydro.drp_gm_idx;
 			
 			CREATE INDEX drp_gm_idx ON pghydro.pghft_drainage_point USING GIST(drp_gm);
@@ -1574,17 +1600,22 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
+			self.Vacuum_Database()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
 			self.execute_sql(sql4)
 			self.execute_sql(sql5)
 			self.execute_sql(sql6)
-			
+
 			self.Check_DrainageAreaMoreOneDrainageLine()
 			self.Check_DrainageLineNoDrainageArea()
 			self.Check_DrainageAreaNoDrainageLine()
 			self.Check_DrainageLineMoreOneDrainageArea()
+
+			self.Vacuum_Database()
 			
 			self.print_console_message('Topological Consistency Successfully Checked!\n')
 
@@ -1601,18 +1632,18 @@ class PghydroTools:
 		distance_to_sea = self.dlg.lineEdit_distance_to_sea.text()
 		pfafstetter_basin_code = self.dlg.lineEdit_pfafstetter_basin_code.text()
 		pfafstetter_basin_code_level = len(pfafstetter_basin_code)
+		watershed_pfafstetter_max_code = self.dlg.lineEdit_watershed_pfafstetter_max_code.text()
 		
-		self.print_console_message('Turning Off Indexes. Please, wait...\n')
+		DrainageLineOffset = self.dlg.lineEdit_DrainageLineOffset.text()
+
+		WaterCourseOffset = (int(DrainageLineOffset)/2)+1
+
 		self.Turn_OFF_Audit()
 
-		sql = """
-		SELECT pghydro.pghfn_TurnOffKeysIndex();
-		"""
+		if self.dlg.checkBox_TurnOffKeysIndex.isChecked():
+			
+			self.Turn_OFF_Keys_Index()
 
-		self.execute_sql(sql)
-		
-		self.print_console_message('Indexes Successfully Turned Off!\n')
-		
 		if self.dlg.checkBox_CalculateDrainageLineLength.isChecked():
 			
 			self.print_console_message('Updating Drainage Line Length. Please, wait...\n')
@@ -1625,6 +1656,8 @@ class PghydroTools:
 			
 			self.print_console_message('Drainage Line Length Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_CalculateDrainageAreaArea.isChecked():
 			
 			self.print_console_message('Updating Drainage Area Area. Please, wait...\n')
@@ -1636,7 +1669,9 @@ class PghydroTools:
 			self.execute_sql(sql)
 			
 			self.print_console_message('Drainage Area Area Successfully Updated!\n')
-			
+
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_CalculateDistanceToSea.isChecked():
 			
 			self.print_console_message('Updating Sea Distance. Please, wait...\n')
@@ -1648,6 +1683,8 @@ class PghydroTools:
 			self.execute_sql(sql)
 			
 			self.print_console_message('Sea Distance Successfully Updated!\n')
+
+			self.Vacuum_Database()
 
 		if self.dlg.checkBox_CalculateUpstreamArea.isChecked():
 			
@@ -1661,6 +1698,8 @@ class PghydroTools:
 			
 			self.print_console_message('Upstream Area Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_CalculateUpstreamDrainageLine.isChecked():
 			
 			self.print_console_message('Updating Upstream Drainage Line. Please, wait...\n')
@@ -1672,6 +1711,8 @@ class PghydroTools:
 			self.execute_sql(sql)
 			
 			self.print_console_message('Upstream Drainage Line Successfully Updated!\n')
+
+			self.Vacuum_Database()
 			
 		if self.dlg.checkBox_CalculateDownstreamDrainageLine.isChecked():
 			
@@ -1685,6 +1726,8 @@ class PghydroTools:
 			
 			self.print_console_message('Downstream Drainage Line Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_Calculate_Pfafstetter_Codification.isChecked():
 			
 			self.print_console_message('Calculating Pfafstetter Basin Coding. Please, wait...\n')
@@ -1696,6 +1739,8 @@ class PghydroTools:
 			self.execute_sql(sql)
 			
 			self.print_console_message('Pfafstetter Basin Coding Successfully Calculated!\n')
+
+			self.Vacuum_Database()
 
 		if self.dlg.checkBox_UpdatePfafstetterBasinCode.isChecked():
 			
@@ -1709,6 +1754,8 @@ class PghydroTools:
 			
 			self.print_console_message('Pfafstetter Basin Coding Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_UpdatePfafstetterWatercourseCode.isChecked():
 			
 			self.print_console_message('Updating Pfafstetter Water Course Coding. Please, wait...\n')
@@ -1721,17 +1768,21 @@ class PghydroTools:
 			
 			self.print_console_message('Pfafstetter Water Course Coding Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_UpdateWatercourse.isChecked():
 			
 			self.print_console_message('Updating Water Course. Please, wait...\n')
 
 			sql = """
-			SELECT pghydro.pghfn_UpdateWatercourse();
+			SELECT pghydro.pghfn_UpdateWatercourse("""+str(WaterCourseOffset)+""");
 			"""
 
 			self.execute_sql(sql)
 			
-			self.print_console_message('Water Course Successfully Updated!\n')
+			self.print_console_message("""Water Course Successfully Updated! Offset:"""+str(WaterCourseOffset)+"""\n""")
+
+			self.Vacuum_Database()
 
 		if self.dlg.checkBox_InsertColumnPfafstetterBasinCodeLevel.isChecked():
 			
@@ -1744,6 +1795,8 @@ class PghydroTools:
 			self.execute_sql(sql)
 			
 			self.print_console_message('Pfafstetter Basin Coding Columns Successfully Updated!\n')
+
+			self.Vacuum_Database()
 
 		if self.dlg.checkBox_UpdateWatercourse_Point.isChecked():
 			
@@ -1777,6 +1830,8 @@ class PghydroTools:
 			
 			self.print_console_message('Outlet Sea Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_calculatestrahlernumber.isChecked():
 			
 			self.print_console_message('Updating Strahler Order. Please, wait...\n')
@@ -1789,6 +1844,8 @@ class PghydroTools:
 			
 			self.print_console_message('Strahler Order Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_updateshoreline.isChecked():
 			
 			self.print_console_message('Updating Shoreline. Please, wait...\n')
@@ -1800,6 +1857,8 @@ class PghydroTools:
 			self.execute_sql(sql)
 			
 			self.print_console_message('Shoreline Successfully Updated!\n')
+
+			self.Vacuum_Database()
 			
 		if self.dlg.checkBox_UpdateDomainColumn.isChecked():
 			
@@ -1813,17 +1872,11 @@ class PghydroTools:
 			
 			self.print_console_message('Water Course Domain Successfully Updated!\n')
 
+			self.Vacuum_Database()
+
 		if self.dlg.checkBox_TurnOnKeysIndex.isChecked():
 			
-			self.print_console_message('Turning On Indexes...\n')
-
-			sql = """
-			SELECT pghydro.pghfn_TurnOnKeysIndex();
-			"""
-
-			self.execute_sql(sql)
-			
-			self.print_console_message('Indexes Successfully Turned On!\n')
+			self.Turn_ON_Keys_Index()
 
 		if self.dlg.checkBox_UpdateWatershed.isChecked():
 
@@ -1831,43 +1884,32 @@ class PghydroTools:
 				x=1
 			else:
 				
-				self.print_console_message('Turning On Indexes. Please, wait...\n')
-
-				sql1 = """
-				SELECT pghydro.pghfn_TurnOnKeysIndex();
-				"""
-
-				self.execute_sql(sql1)
-				
-				self.print_console_message('Indexes Successfully Turned On!\n')
-
-			sql_min = """
-			SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN(1);
-			"""
-
-			sql_max = """
-			SELECT pghydro.pghfn_PfafstetterBasinCodeLevelN((SELECT pghydro.pghfn_numPfafstetterBasinCodeLevel()::integer));
-			"""
+				self.Turn_ON_Keys_Index()
 
 			result_min = pfafstetter_basin_code_level
 
-			result_max = self.return_sql(sql_max)
+			result_max = watershed_pfafstetter_max_code
 
 			try:
 				
 				self.print_console_message("Updating Pfafstetter Basin Coding Level "+result_max+". Please, wait...")
 
-				sql2 = """
+				sql = """
 				TRUNCATE TABLE pghydro.pghft_watershed;
 				"""
-				
-				sql3 = """
+
+				self.execute_sql(sql)
+
+				sql = """
+				SELECT setval(('pghydro.wts_pk_seq'::text)::regclass, 1, false);
+				"""
+				self.execute_sql(sql)
+			
+				sql = """
 				SELECT pghydro.pghfn_updatewatersheddrainagearea("""+str(result_max)+""");
 				"""
 
-				self.execute_sql(sql2)
-
-				self.execute_sql(sql3)
+				self.execute_sql(sql)
 				
 				self.print_console_message("Pfafstetter Basin Coding Level "+result_max+" Successfully Updated!")
 
@@ -1883,11 +1925,11 @@ class PghydroTools:
 					
 					self.print_console_message("Updating Pfafstetter Basin Coding Level "+str(count-1)+". Please, wait...")
 
-					sql4 = """
+					sql = """
 					SELECT pghydro.pghfn_updatewatershed("""+str(count)+""");
 					"""
 
-					self.execute_sql(sql4)
+					self.execute_sql(sql)
 					
 					self.print_console_message("Pfafstetter Basin Coding Level "+str(count-1)+" Successfully Updated!")
 					
@@ -1898,6 +1940,8 @@ class PghydroTools:
 				count = count -1
 
 			self.print_console_message("All Pfafstetter Basin Coding Level Successfully Updated!")
+			
+		self.Vacuum_Database()
 
 ###Export Data				
 				
@@ -1905,60 +1949,44 @@ class PghydroTools:
 		
 		self.print_console_message('Updating Output Geometry Tables. Please, wait...\n')
 		
-		self.print_console_message('Turning Off Indexes. Please, wait...\n')
-
-		sql = """
-		SELECT pghydro.pghfn_TurnOffKeysIndex();
-		"""
-
-		self.Turn_OFF_Audit()
-
-		self.execute_sql(sql)
-		
-		self.print_console_message('Indexes Successfully Turned Off!\n')
-		
-		self.print_console_message('Turning On Indexes. Please, wait...\n')
-
-		sql = """
-		SELECT pghydro.pghfn_TurnOnKeysIndex();
-		"""
-
-		self.execute_sql(sql)
-		
-		self.print_console_message('Indexes Successfully Turned Off!\n')
-
 		sql = """
 		SELECT pgh_output.pghfn_UpdateExportTables();
 		"""
 
+		self.Turn_OFF_Audit()
+
+		self.Turn_OFF_Keys_Index()
+
+		self.Vacuum_Database()
+		
+		self.Turn_ON_Keys_Index()
+
 		self.execute_sql(sql)
+
+		self.Vacuum_Database()
 		
 		self.print_console_message('Output Geometry Tables Successfully Updated!\n')
 
     def Start_Systematize_Hydronym(self):
 
 		try:
-			self.print_console_message("Starting Hydronima Systematization. Please, wait...")
+			self.print_console_message("Starting Hydronymia Systematization. Please, wait...")
 
 			sql1 = """
-			SELECT pghydro.pghfn_TurnOffKeysIndex();
-			"""
-
-			sql2 = """
 			ALTER TABLE pghydro.pghft_drainage_line
 			DROP COLUMN IF EXISTS drn_dra_cd_pfafstetterbasin,
 			DROP COLUMN IF EXISTS drn_wtc_cd_pfafstetterwatercourse,
 			DROP COLUMN IF EXISTS drn_wtc_gm_area;
 			"""
 
-			sql3 = """
+			sql2 = """
 			ALTER TABLE pghydro.pghft_drainage_line
 			ADD COLUMN drn_dra_cd_pfafstetterbasin varchar,
 			ADD COLUMN drn_wtc_cd_pfafstetterwatercourse varchar,
 			ADD COLUMN drn_wtc_gm_area numeric;
 			"""
 
-			sql4 = """
+			sql3 = """
 			DROP INDEX IF EXISTS pghydro.drn_pk_idx;
 
 			CREATE INDEX drn_pk_idx ON pghydro.pghft_drainage_line(drn_pk); 
@@ -1972,14 +2000,14 @@ class PghydroTools:
 			CREATE INDEX dra_pk_idx ON pghydro.pghft_drainage_area(dra_pk); 
 			"""
 
-			sql5 = """
+			sql4 = """
 			UPDATE pghydro.pghft_drainage_line drn
 			SET drn_dra_cd_pfafstetterbasin = dra.dra_cd_pfafstetterbasin
 			FROM pghydro.pghft_drainage_area dra
 			WHERE drn.drn_dra_pk = dra.dra_pk;
 			"""
 
-			sql6 = """
+			sql5 = """
 			DROP INDEX IF EXISTS pghydro.drn_wtc_pk_idx;
 
 			CREATE INDEX drn_wtc_pk_idx ON pghydro.pghft_drainage_line(drn_wtc_pk); 
@@ -1989,21 +2017,21 @@ class PghydroTools:
 			CREATE INDEX wtc_pk_idx ON pghydro.pghft_watercourse(wtc_pk); 
 			"""
 
-			sql7 = """
+			sql6 = """
 			UPDATE pghydro.pghft_drainage_line drn
 			SET drn_wtc_cd_pfafstetterwatercourse = wtc.wtc_cd_pfafstetterwatercourse
 			FROM pghydro.pghft_watercourse wtc
 			WHERE drn.drn_wtc_pk = wtc.wtc_pk;
 			"""
 
-			sql8 = """
+			sql7 = """
 			UPDATE pghydro.pghft_drainage_line drn
 			SET drn_wtc_gm_area = wtc.wtc_gm_area
 			FROM pghydro.pghft_watercourse wtc
 			WHERE drn.drn_wtc_pk = wtc.wtc_pk;
 			"""
 
-			sql9 = """
+			sql8 = """
 			DROP INDEX IF EXISTS pghydro.drn_pk_idx;
 			
 			DROP INDEX IF EXISTS pghydro.drn_dra_pk_idx;
@@ -2022,6 +2050,11 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
+			self.Turn_OFF_Keys_Index()
+
+			self.Vacuum_Database()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
@@ -2030,7 +2063,8 @@ class PghydroTools:
 			self.execute_sql(sql6)
 			self.execute_sql(sql7)
 			self.execute_sql(sql8)
-			self.execute_sql(sql9)
+
+			self.Vacuum_Database()
 			
 			self.print_console_message("Hydronymia Systematization Successfully Started!")
 
@@ -2089,10 +2123,15 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
+			self.Vacuum_Database()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			self.execute_sql(sql3)
 			self.execute_sql(sql4)
+
+			self.Vacuum_Database()
 			
 			self.print_console_message("Names Successfully Systematized!")
 			
@@ -2125,6 +2164,7 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			
@@ -2151,6 +2191,7 @@ class PghydroTools:
 			"""
 
 			self.Turn_OFF_Audit()
+
 			self.execute_sql(sql1)
 			self.execute_sql(sql2)
 			
@@ -2179,7 +2220,7 @@ class PghydroTools:
 		try:
 			self.print_console_message("Stoping Hydronymia Systematization. Please, wait...")
 
-			sql1 = """
+			sql = """
 			DROP INDEX IF EXISTS pghydro.dra_cd_pfafstetterbasin_idx;
 			
 			DROP INDEX IF EXISTS pghydro.wtc_cd_pfafstetterwatercourse_idx;
@@ -2190,20 +2231,17 @@ class PghydroTools:
 			DROP COLUMN IF EXISTS drn_wtc_gm_area;
 			"""
 
-			sql2 = """
-			SELECT pghydro.pghfn_turnoffkeysindex();
-			"""
-
-			sql3 = """
-			SELECT pghydro.pghfn_turnonkeysindex();
-			"""
-
 			self.Turn_OFF_Audit()
-			self.execute_sql(sql1)
-			self.execute_sql(sql2)
-			self.execute_sql(sql3)
+
+			self.execute_sql(sql)
+
+			self.Turn_OFF_Keys_Index()
+
+			self.Vacuum_Database()
+
+			self.Turn_ON_Keys_Index()
 			
-			self.print_console_message("Hydronima Systematization Successfully Done!")
+			self.print_console_message("Hydronymia Systematization Successfully Done!")
 			
 		except:
 			self.print_console_message('ERROR\nCheck Database Input Parameters!')
@@ -2415,7 +2453,58 @@ class PghydroTools:
 		self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.addItems(none)
 		fields = [field.name() for field in selectedLayer.pendingFields()]
 		self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.addItems(fields)
+
+
+    def Vacuum_Database(self):
+
+		if self.dlg.checkBox_Vacuum_Database.isChecked():
+			
+			self.print_console_message('Vacuuming Database. Please, wait...\n')
 		
+			try:
+				sql = """
+				VACUUM(FULL, ANALYZE);
+				"""
+
+				self.execute_sql(sql)
+			
+				self.print_console_message('Database Successfully Vacuumed!\n')
+			
+			except:
+				self.print_console_message('ERROR\nCheck Database Input Parameters!')
+
+    def Turn_ON_Keys_Index(self):
+		
+		self.print_console_message('Turning On Indexes. Please, wait...\n')
+		
+		try:
+			sql = """
+			SELECT pghydro.pghfn_turnonkeysindex();
+			"""
+
+			self.execute_sql(sql)
+
+			self.print_console_message('Indexes Successfully Turned On!\n')
+			
+		except:
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
+
+    def Turn_OFF_Keys_Index(self):
+		
+		self.print_console_message('Turning Off Indexes. Please, wait...\n')
+		
+		try:
+			sql = """
+			SELECT pghydro.pghfn_turnoffkeysindex();
+			"""
+
+			self.execute_sql(sql)
+
+			self.print_console_message('Indexes Successfully Turned Off!\n')
+			
+		except:
+			self.print_console_message('ERROR\nCheck Database Input Parameters!')
+
     def run(self):
         """Run method that performs all the real work"""
 	self.dlg.input_drainage_line_table_MapLayerComboBox.clear()
