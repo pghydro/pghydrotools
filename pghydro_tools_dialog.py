@@ -1039,3 +1039,12 @@ class Ui_PghydroToolsDialogBase(object):
         self.groupBox_5.setTitle(_translate("PghydroToolsDialogBase", "Console"))
 
 import resources_rc
+from qgis.PyQt.QtWidgets import QWidget
+
+class PghydroToolsDialog(QWidget, Ui_PghydroToolsDialogBase):
+    def __init__(self, parent = None):
+        """
+        Constructor
+        """
+        super(PghydroToolsDialog, self).__init__(parent)
+        self.setupUi(self)
