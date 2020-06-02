@@ -29,7 +29,7 @@ from qgis.PyQt.QtGui import QIcon
 # Initialize Qt resources from file resources.py
 from . import resources
 # Import the code for the dialog
-from pghydro_tools_dialog import PghydroToolsDialog
+from .pghydro_tools_dialog import PghydroToolsDialog
 import os.path
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
@@ -40,8 +40,8 @@ import os, subprocess
 import osgeo
 from osgeo import gdal
 from osgeo import ogr
-from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox, QgsMapLayerProxyModel
-from qgis.core import QgsDataSourceURI, QgsVectorLayer
+from qgis.gui import QgsFieldComboBox, QgsMapLayerComboBox
+from qgis.core import QgsDataSourceUri, QgsVectorLayer, QgsMapLayerProxyModel
 
 class PghydroTools(object):
     """QGIS Plugin Implementation."""
@@ -367,13 +367,13 @@ class PghydroTools(object):
 
         try:
         
-            layers = self.iface.legendInterface().layers()
+            layers = self.iface.mapCanvas().layers()
             selectedLayerIndex = self.dlg.input_drainage_line_table_MapLayerComboBox.currentIndex()
             selectedLayer = layers[selectedLayerIndex]
-            input_drainage_line_table_schema = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).schema()
-            input_drainage_line_table = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).table()
+            input_drainage_line_table_schema = QgsDataSourceUri(selectedLayer.dataProvider().dataSourceUri()).schema()
+            input_drainage_line_table = QgsDataSourceUri(selectedLayer.dataProvider().dataSourceUri()).table()
             input_drainage_line_table_attribute_name = self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.currentText()
-            input_drainage_line_table_attribute_geom = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).geometryColumn ()
+            input_drainage_line_table_attribute_geom = QgsDataSourceUri(selectedLayer.dataProvider().dataSourceUri()).geometryColumn ()
         
             self.print_console_message('Importing Drainage Lines. Please, wait...\n')
 
@@ -402,12 +402,12 @@ class PghydroTools(object):
         try:
             self.print_console_message('Importing Drainage Areas. Please, wait...\n')
 
-            layers = self.iface.legendInterface().layers()
+            layers = self.iface.mapCanvas().layers()
             selectedLayerIndex = self.dlg.input_drainage_area_table_MapLayerComboBox.currentIndex()
             selectedLayer = layers[selectedLayerIndex]
-            input_drainage_area_table_schema = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).schema()
-            input_drainage_area_table = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).table()
-            input_drainage_area_table_attribute_geom = QgsDataSourceURI(selectedLayer.dataProvider().dataSourceUri()).geometryColumn ()
+            input_drainage_area_table_schema = QgsDataSourceUri(selectedLayer.dataProvider().dataSourceUri()).schema()
+            input_drainage_area_table = QgsDataSourceUri(selectedLayer.dataProvider().dataSourceUri()).table()
+            input_drainage_area_table_attribute_geom = QgsDataSourceUri(selectedLayer.dataProvider().dataSourceUri()).geometryColumn ()
             
             self.print_console_message('Updating Drainage Areas. Please, wait...\n')
 
@@ -2449,7 +2449,7 @@ class PghydroTools(object):
             self.print_console_message('ERROR\nCheck Database Input Parameters!')
 
     def input_drainage_line_table_attribute_name_select(self):
-        layers = self.iface.legendInterface().layers()
+        layers = self.iface.mapCanvas().layers()
         self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.clear()
         selectedLayerIndex = self.dlg.input_drainage_line_table_MapLayerComboBox.currentIndex()
         selectedLayer = layers[selectedLayerIndex]
@@ -2511,21 +2511,22 @@ class PghydroTools(object):
 
     def run(self):
         """Run method that performs all the real work"""
-    self.dlg.input_drainage_line_table_MapLayerComboBox.clear()
-    self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.clear()
-    self.dlg.input_drainage_area_table_MapLayerComboBox.clear()
+        self.dlg.input_drainage_line_table_MapLayerComboBox.clear()
+        self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.clear()
+        self.dlg.input_drainage_area_table_MapLayerComboBox.clear()
 
-    layers = self.iface.legendInterface().layers()
-    layer_list = []
-    for layer in layers:
-        layer_list.append(layer.name())
-            
-    self.dlg.input_drainage_line_table_MapLayerComboBox.addItems(layer_list)
-    self.dlg.input_drainage_area_table_MapLayerComboBox.addItems(layer_list)
-    
-        # show the dialog
-    self.dlg.show()
-        # Run the dialog event loop
-    result = self.dlg.exec_()
+        layers = self.iface.mapCanvas().layers()
+        layer_list = []
+        for layer in layers:
+            layer_list.append(layer.name())
+                
+        self.dlg.input_drainage_line_table_MapLayerComboBox.addItems(layer_list)
+        self.dlg.input_drainage_area_table_MapLayerComboBox.addItems(layer_list)
+        
+            # show the dialog
+        self.dlg.show()
+            # Run the dialog event loop
+        result = self.dlg.exec_()
+
     def closeEvent(self, event):
         event.accept()
