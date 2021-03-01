@@ -8,9 +8,9 @@
 
 [general]
 name=Pghydro Tools
-qgisMinimumVersion=2.0
+qgisMinimumVersion=3.0
 description=PgHydro Tools Interface for PgHydro Extension for PostgreSQL/PostGIS
-version=2.2
+version=3.0
 author=PgHydro Team
 email=pghydro.project@gmail.com
 
@@ -36,6 +36,15 @@ repository=www.github.com/pghydro/pghydrotools
 		- Insert of new version logo
 		- Resource_rc bug fixed including and not more deleting codes.
 		- ...
+	2.4 - Rename "Connect" label button to "Test Connection"
+	    - Update Version labels to version 2.4
+		- Uncheck "Add Pfafstetter Basin Coding Columns"
+		- Update port to 5432
+		- Insert offset to watercourse
+		- Create spatial index to drn_gm_point geometry column in the table pghydro.pghft_drainage_line after Consist "Drainage Line x Drainage Area" check
+        - Execution of Vacuum, Analyse and Reindex after each major processing
+        - ...
+	3.0 - Updated to QGIS 3
 	
 # Tags are comma separated with spaces allowed
 tags=spatial database system, otto pfafstetter, drainage, hydrology, hydrography, hydro
@@ -48,4 +57,3 @@ experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
-
