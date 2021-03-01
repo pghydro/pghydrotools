@@ -2455,7 +2455,7 @@ class PghydroTools(object):
         selectedLayer = layers[selectedLayerIndex]
         none = ['none']
         self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.addItems(none)
-        fields = [field.name() for field in selectedLayer.pendingFields()]
+        fields = [field.name() for field in selectedLayer.fields()]
         self.dlg.input_drainage_line_table_attribute_name_MapLayerComboBox.addItems(fields)
 
 
