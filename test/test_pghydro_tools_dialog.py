@@ -7,6 +7,7 @@
      (at your option) any later version.
 
 """
+from __future__ import absolute_import
 
 __author__ = 'pghydro.project@gmail.com'
 __date__ = '2015-10-07'
@@ -14,11 +15,11 @@ __copyright__ = 'Copyright 2015, Alexandre de Amorim Teixeira'
 
 import unittest
 
-from PyQt4.QtGui import QDialogButtonBox, QDialog
+from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog
 
 from pghydro_tools_dialog import PghydroToolsDialog
 
-from utilities import get_qgis_app
+from .utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 
