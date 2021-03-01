@@ -14,7 +14,7 @@ The develop branch has the next minor release. (development)
 
 Next LTR: version 3.2 (March 2022)
 
-
+Legacy Code QGIS 2.18 Branch (legacy_code_qgis_2.18)
 
 # INTRODUCTION
 
