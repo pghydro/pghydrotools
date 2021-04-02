@@ -3017,7 +3017,7 @@
       </font>
      </property>
      <property name="text">
-      <string>PgHydro Tools Version 3.0</string>
+      <string>PgHydro Tools Version 3.2</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
