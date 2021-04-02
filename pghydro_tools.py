@@ -1640,7 +1640,7 @@ class PghydroTools(object):
         
         DrainageLineOffset = self.dlg.lineEdit_DrainageLineOffset.text()
 
-        WaterCourseOffset = (int(DrainageLineOffset)/2)+1
+        WaterCourseOffset = str(int(int(DrainageLineOffset)/2)+1)
 
         self.Turn_OFF_Audit()
 
@@ -1779,7 +1779,7 @@ class PghydroTools(object):
             self.print_console_message('Updating Water Course. Please, wait...\n')
 
             sql = """
-            SELECT pghydro.pghfn_UpdateWatercourse("""+str(WaterCourseOffset)+""");
+            SELECT pghydro.pghfn_UpdateWatercourse("""+WaterCourseOffset+""");
             """
 
             self.execute_sql(sql)
