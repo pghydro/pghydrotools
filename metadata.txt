@@ -10,21 +10,19 @@
 name=Pghydro Tools
 qgisMinimumVersion=3.0
 description=PgHydro Tools Interface for PgHydro Extension for PostgreSQL/PostGIS
-version=3.0
+version=3.2
 author=PgHydro Team
 email=pghydro.project@gmail.com
 
 about=QGIS PgHydroTools Plugin is an interface used in QGIS to activate all functionality of PgHydro Extension for PostgreSQL/PostGIS
 To use this plugin, you have to install the PgHydro extension for PostgreSQL/PostGIS at https://github.com/pghydro/pghydro
 
-tracker=www.github.com/pghydro/pghydrotools
-repository=www.github.com/pghydro/pghydrotools
 # End of mandatory metadata
 
 # Recommended items:
 
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=
 	2.0.1 - "No module named resources_rc" fixed.
 	2.0.2 - Execute and Return Queries update.
 	2.1 - Translate to English
@@ -45,11 +43,15 @@ repository=www.github.com/pghydro/pghydrotools
         - Execution of Vacuum, Analyse and Reindex after each major processing
         - ...
 	3.0 - Updated to QGIS 3
+	3.2 - Fix bug in watercourse offset
 	
 # Tags are comma separated with spaces allowed
 tags=spatial database system, otto pfafstetter, drainage, hydrology, hydrography, hydro
 
-homepage=www.pghydro.org
+homepage=https://www.github.com/pghydro/pghydrotools/wiki
+tracker=https://www.github.com/pghydro/pghydrotools/issues
+repository=https://www.github.com/pghydro/pghydrotools
+
 category=Database
 icon=icon.png
 # experimental flag
