@@ -32,11 +32,11 @@ PostGIS version 2.0+
 
 QGIS version 3.10+
 
-Pghydro 6.4
+Pghydro 6.4+
 
-Pghydro Consistency 6.4
+Pghydro Consistency 6.4+
 
-Pghydro Output 6.4
+Pghydro Output 6.4+
 
 ## INSTALLATION
 
